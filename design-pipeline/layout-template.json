@@ -1,0 +1,17 @@
+{
+  "meta": {
+    "baseFrame": "1080x1920",
+    "notes": "Use percent values where possible for responsive behavior"
+  },
+  "elements": {
+    "#orders-btn": { "left": "0%", "top": "0%" },
+    "#funds-btn": { "left": "50%", "top": "0%", "transform": "translateX(-50%)" },
+    "#menu-btn": { "right": "0%", "top": "0%" },
+    "#generate-btn": { "left": "50%", "bottom": "8%", "transform": "translateX(-50%)" },
+    ".level-panel": { "left": "2.2%", "top": "18%", "bottom": "18%" },
+    ".stress-panel": { "right": "2.2%", "top": "18%", "bottom": "18%" },
+    "#autogen-toggle-panel": { "right": "2.2%", "top": "82%" },
+    "#task-timer-panel": { "left": "4%", "right": "4%", "bottom": "1.1%" },
+    "#main-menu-overlay .menu-window": { "width": "94%", "height": "90%" }
+  }
+}
