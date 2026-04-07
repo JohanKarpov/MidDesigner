@@ -28,20 +28,20 @@ window.GAME_STRINGS = {
     // ============================================================
     tutorial_cinematic: {
         // [thought] = внутренний монолог GG
-        thought_01:        { en: "My head hurts so much...",                                                                                                     ru: "" },
-        thought_02:        { en: "So bright!",                                                                                                                   ru: "" },
-        thought_03:        { en: "I need to try opening my eyes.",                                                                                               ru: "" },
-        thought_04:        { en: "Is someone calling me?",                                                                                                       ru: "" },
-        thought_05:        { en: "Who...?",                                                                                                                      ru: "" },
+        thought_01:        { en: "My head hurts so much...",                                                                                                     ru: "Как же болит голова..." },
+        thought_02:        { en: "So bright!",                                                                                                                   ru: "Так ярко!" },
+        thought_03:        { en: "I need to try opening my eyes.",                                                                                               ru: "Нужно попробовать открыть глаза." },
+        thought_04:        { en: "Is someone calling me?",                                                                                                       ru: "Кто-то мне звонит??" },
+        thought_05:        { en: "Who...?",                                                                                                                      ru: "Кто...?" },
 
         // Диалоги
-        chatdjbt_01:       { en: "HEY BOSS!",                                                                                                                    ru: "" },
-        chatdjbt_02:       { en: "YOU ARE AWAKE? I WAS STARTING TO WORRY THAT YOU... RESET YOURSELF!",                                                          ru: "" },
-        chatdjbt_03:       { en: "ANYWAY, I STILL REMEMBER YOUR PLAN! NOW WE QUICKLY...",                                                                       ru: "" },
-        gg_01:             { en: "What? Slow down... What is happening? Why is CHAT DJBT calling me? And what plan are you talking about?",                     ru: "" },
-        chatdjbt_04:       { en: "Uh-oh! Looks like your wilderness era really left a mark...",                                                                  ru: "" },
-        chatdjbt_05:       { en: "But that is fine, we are used to climbing back up from nothing!",                                                              ru: "" },
-        chatdjbt_06:       { en: "Let me quickly bring you up to speed...",                                                                                      ru: "" },
+        chatdjbt_01:       { en: "HEY BOSS!",                                                                                                                    ru: "ЭЙ, БОСС!" },
+        chatdjbt_02:       { en: "YOU ARE AWAKE? I WAS STARTING TO WORRY THAT YOU... RESET YOURSELF!",                                                          ru: "ТЫ ПРОСНУЛСЯ? Я УЖЕ НАЧАЛ БЕСПОКОИТЬСЯ, ЧТО ТЫ... ОБНУЛИЛСЯ!" },
+        chatdjbt_03:       { en: "ANYWAY, I STILL REMEMBER YOUR PLAN! NOW WE QUICKLY...",                                                                       ru: "В ЛЮБОМ СЛУЧАЕ, Я ВСЕ ЕЩЕ ПОМНЮ ТВОЙ ПЛАН! СЕЙЧАС МЫ БЫСТРО..." },
+        gg_01:             { en: "What? Slow down... What is happening? Why is CHAT DJBT calling me? And what plan are you talking about?",                     ru: "Что? Притормози... Что происходит? Почему мне звонит CHAT DJBT? И о каком плане ты говоришь?" },
+        chatdjbt_04:       { en: "Uh-oh! Looks like your wilderness era really left a mark...",                                                                  ru: "Ой-ой! Похоже, время в дикой природе действительно оставило след..." },
+        chatdjbt_05:       { en: "But that is fine, we are used to climbing back up from nothing!",                                                              ru: "Но это нормально, нам не привыкать подниматься с нуля!" },
+        chatdjbt_06:       { en: "Let me quickly bring you up to speed...",                                                                                      ru: "Давай я быстро введу тебя в курс дела..." },
     },
 
     // ============================================================

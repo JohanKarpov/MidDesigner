@@ -62,6 +62,7 @@ Status legend:
 | Q-034 | Should we create custom pixel-art textures and visual assets for the upgrades/skill tree menu to replace placeholder icons and improve visual identity? | accepted | User | Define asset list and style guide for upgrade menu textures; produce sprites per node category |
 | Q-035 | Should we add secondary parallax sprite layers to the skill tree viewport — decorative objects moving at a different depth speed than the stars to reinforce spatial depth during panning? | accepted | User | Design sprite set, define per-layer parallax speed multipliers, integrate alongside existing starfield canvas |
 | Q-036 | Should we fully rework the Autogenerator — economy, UX, toggle behavior, tick cost — as part of the new upgrade nodes pass? | accepted | User | Scope autogen rework within the upgrade node matrix sprint; freeze current cost at 0 until rework is delivered |
+| Q-037 | Should we integrate the Telegram Web App SDK — init call, viewport expand, back button hook, and haptic feedback on key actions? | accepted | User | Add telegram-web-app.js script tag, call window.Telegram.WebApp.ready(), expand viewport, wire BackButton to overlay close navigation, add haptic triggers on generate/complete/buy |
 
 ## Current Product Goals
 - Build a clear 4-category task flow: Orders, Story, Research, Promotion.
@@ -239,6 +240,7 @@ Upgrade node concept (AI branch):
 - `accepted` Create pixel-art texture/icon assets for the upgrades menu (Q-034).
 - `accepted` Design and integrate secondary parallax sprite layers into the skill tree viewport for enhanced spatial depth (Q-035).
 - `accepted` Fully rework Autogenerator within the upgrade nodes pass (Q-036): economy model, tick cost, toggle UX, and upgrade interactions.
+- `accepted` Integrate Telegram Web App SDK: init, fullscreen viewport, BackButton navigation, haptic feedback on key interactions (Q-037).
 
 ## Decision Log
 - 2026-04-04: Locked cards finalized as visible but non-selectable with `Blocked` + requirement text and gray styling.
@@ -278,3 +280,5 @@ Upgrade node concept (AI branch):
 - 2026-04-06: Accepted Q-034 — create custom pixel-art textures and icons for upgrades/skill tree menu; asset list and style guide to be defined before production.
 - 2026-04-06: Accepted Q-035 — add secondary parallax sprite layers to skill tree viewport alongside existing starfield; per-layer speed multipliers and sprite set to be designed.
 - 2026-04-06: Accepted Q-036 — full Autogenerator rework scoped within upgrade nodes pass; AUTOGEN_TICK_COST frozen at 0 in the meantime.
+- 2026-04-07: Accepted Q-037 — Telegram WebApp SDK integration scoped to final deployment phase.
+- 2026-04-07: Accepted Q-037 — Telegram WebApp SDK integration scoped to final deployment phase; covers init, viewport expand, BackButton, and haptic feedback.
