@@ -29,12 +29,16 @@ import { preloadAssets }                                                    from
 (function initTelegramWebApp() {
     const tg = window.Telegram?.WebApp;
     if (!tg) return;
-    tg.ready();
-    // Expand to full screen (SDK 7.7+)
-    if (typeof tg.requestFullscreen === 'function') tg.requestFullscreen();
-    else tg.expand();
-    // Disable swipe-down-to-close gesture
-    if (typeof tg.disableVerticalSwipes === 'function') tg.disableVerticalSwipes();
+    try { tg.ready(); } catch (_) {}
+    try {
+        if (typeof tg.requestFullscreen === 'function') tg.requestFullscreen();
+        else tg.expand();
+    } catch (_) {
+        try { tg.expand(); } catch (_) {}
+    }
+    try {
+        if (typeof tg.disableVerticalSwipes === 'function') tg.disableVerticalSwipes();
+    } catch (_) {}
 })();
 
 console.log('[game] module imports resolved OK');
