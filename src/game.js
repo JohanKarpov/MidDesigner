@@ -273,7 +273,7 @@ function _checkBuildVersion(onContinue) {
     const container = document.querySelector('.game-container') || document.body;
 
     const backdrop = document.createElement('div');
-    backdrop.style.cssText = 'position:absolute;inset:0;z-index:99998;background:rgba(0,0,0,0.85);display:flex;align-items:center;justify-content:center;';
+    backdrop.style.cssText = 'position:fixed;inset:0;z-index:99998;background:rgba(0,0,0,0.85);display:flex;align-items:center;justify-content:center;';
 
     const box = document.createElement('div');
     box.style.cssText = 'background:#1a1a2e;border:1px solid #ff4d4d;border-radius:8px;padding:24px 20px;max-width:320px;width:90%;display:flex;flex-direction:column;gap:14px;font-family:\'Tiny5\',monospace;color:#eee;text-align:center;';
