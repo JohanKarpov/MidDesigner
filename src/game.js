@@ -21,6 +21,21 @@ import {
 }                                                                           from './ui-hud.js';
 import { initIntro, startIfNeeded, fireCh1Event, setIntroCallbacks }        from './intro.js';
 import { initAudio, startHomeMusic }                                        from './audio.js';
+import { preloadAssets }                                                    from './preload.js';
+
+// ─────────────────────────────────────────────────────────────
+// Telegram WebApp init
+// ─────────────────────────────────────────────────────────────
+(function initTelegramWebApp() {
+    const tg = window.Telegram?.WebApp;
+    if (!tg) return;
+    tg.ready();
+    // Expand to full screen (SDK 7.7+)
+    if (typeof tg.requestFullscreen === 'function') tg.requestFullscreen();
+    else tg.expand();
+    // Disable swipe-down-to-close gesture
+    if (typeof tg.disableVerticalSwipes === 'function') tg.disableVerticalSwipes();
+})();
 
 console.log('[game] module imports resolved OK');
 
@@ -123,6 +138,7 @@ function step(n, label, fn) {
 function init() {
     console.log('[game] init() start — module loaded OK');
 
+    step(0,  'preloadAssets',        () => preloadAssets());
     step(1,  'loadState',            () => loadState());
     step(1.1,'reapplySkillTreeEffects', () => reapplySkillTreeEffects());
     step(1.2,'recomputeGenerationCooldown', () => recomputeGenerationCooldown());
@@ -225,6 +241,88 @@ function _onVisibilityChange() {
     if (document.visibilityState === 'hidden') saveState();
 }
 document.addEventListener('visibilitychange', _onVisibilityChange);
+
+// ─────────────────────────────────────────────────────────────
+// Version check — shown before init() if build version changed
+// ─────────────────────────────────────────────────────────────
+
+function _checkBuildVersion(onContinue) {
+    const stored  = localStorage.getItem(Config.BUILD_VERSION_KEY);
+    const current = Config.BUILD_VERSION;
+    const hasSave = !!localStorage.getItem(Config.SAVE_KEY);
+
+    // Fresh install — no existing save, nothing to break
+    if (!hasSave) {
+        localStorage.setItem(Config.BUILD_VERSION_KEY, current);
+        onContinue();
+        return;
+    }
+
+    // Has save and version matches — all good
+    if (stored === current) {
+        onContinue();
+        return;
+    }
+
+    // Has save but version is missing or outdated — show warning.
+    // This covers players who played before version tracking was added (stored === null)
+    // AND players on a genuinely outdated build.
+
+    // Versions differ — show warning popup
+    const isRu = (localStorage.getItem(Config.LANGUAGE_SAVE_KEY) || 'ru') === 'ru';
+    const container = document.querySelector('.game-container') || document.body;
+
+    const backdrop = document.createElement('div');
+    backdrop.style.cssText = 'position:absolute;inset:0;z-index:99998;background:rgba(0,0,0,0.85);display:flex;align-items:center;justify-content:center;';
+
+    const box = document.createElement('div');
+    box.style.cssText = 'background:#1a1a2e;border:1px solid #ff4d4d;border-radius:8px;padding:24px 20px;max-width:320px;width:90%;display:flex;flex-direction:column;gap:14px;font-family:\'Tiny5\',monospace;color:#eee;text-align:center;';
+
+    const title = document.createElement('div');
+    title.style.cssText = 'font-size:16px;color:#ff4d4d;letter-spacing:1px;';
+    title.textContent = isRu ? '⚠ ОБНОВЛЕНИЕ ИГРЫ' : '⚠ GAME UPDATED';
+
+    const desc = document.createElement('div');
+    desc.style.cssText = 'font-size:11px;line-height:1.6;color:#ccc;';
+    desc.textContent = isRu
+        ? `Версия изменилась с ${stored} на ${current}.\n\nВозможны конфликты с существующим сохранением. Рекомендуем сбросить прогресс для стабильной работы.`
+        : `Version changed from ${stored} to ${current}.\n\nYour save may conflict with the new version. A full reset is recommended for stability.`;
+
+    const btnContinue = document.createElement('button');
+    btnContinue.type = 'button';
+    btnContinue.style.cssText = 'padding:10px;background:#2a2a4a;border:1px solid #555;border-radius:4px;color:#eee;font-family:\'Tiny5\',monospace;font-size:12px;cursor:pointer;';
+    btnContinue.textContent = isRu ? 'ПРОДОЛЖИТЬ С СОХРАНЕНИЕМ' : 'KEEP SAVE & CONTINUE';
+
+    const btnReset = document.createElement('button');
+    btnReset.type = 'button';
+    btnReset.style.cssText = 'padding:10px;background:#3a1a1a;border:1px solid #ff4d4d;border-radius:4px;color:#ff4d4d;font-family:\'Tiny5\',monospace;font-size:12px;cursor:pointer;';
+    btnReset.textContent = isRu ? 'ПОЛНЫЙ СБРОС' : 'FULL RESET';
+
+    box.appendChild(title);
+    box.appendChild(desc);
+    box.appendChild(btnContinue);
+    box.appendChild(btnReset);
+    backdrop.appendChild(box);
+    container.appendChild(backdrop);
+
+    btnContinue.addEventListener('click', () => {
+        localStorage.setItem(Config.BUILD_VERSION_KEY, current);
+        backdrop.remove();
+        onContinue();
+    });
+
+    btnReset.addEventListener('click', () => {
+        if (typeof window.__resetSave === 'function') {
+            backdrop.remove();
+            window.__resetSave(false);
+        } else {
+            // Fallback: clear keys and reload
+            [Config.SAVE_KEY, Config.FOREST_SAVE_KEY, Config.CHAPTERS_SAVE_KEY].forEach(k => localStorage.removeItem(k));
+            localStorage.setItem(Config.BUILD_VERSION_KEY, current);
+            location.reload();
+        }
+    });
+}
 
 // ─────────────────────────────────────────────────────────────
 // Dev helpers (accessible from browser console)
@@ -405,4 +503,4 @@ window.__resetSave = (skipNativePrompt = false, mode = 'scratch') => {
 // Boot
 // ─────────────────────────────────────────────────────────────
 
-init();
+_checkBuildVersion(() => init());
