@@ -38,7 +38,40 @@ import { preloadAssets }                                                    from
     }
     try {
         if (typeof tg.disableVerticalSwipes === 'function') tg.disableVerticalSwipes();
-    } catch (_) {}
+        // Fallback: property setter available in some SDK versions
+        else tg.isVerticalSwipesEnabled = false;
+    } catch (_) {
+        try { tg.isVerticalSwipesEnabled = false; } catch (_) {}
+    }
+})();
+
+// ─────────────────────────────────────────────────────────────
+// Global swipe-to-minimize blocker
+// Telegram WebApp on iOS intercepts vertical touchmove at the
+// WebView level and closes the app. SDK disableVerticalSwipes()
+// doesn't always work on older SDK versions, so we also block
+// at the DOM level — but only outside scrollable containers.
+// ─────────────────────────────────────────────────────────────
+(function blockTelegramSwipeDown() {
+    const SCROLLABLE = [
+        '.orders-list',
+        '.shop-category-list',
+        '.shop-body',
+        '.achievements-list',
+        '.stats-screen-body',
+        '.deeds-screen-body',
+        '.menu-body',
+        '.upgrade-tab-content',
+        '.task-list',
+        '.stats-body',
+        '.achievements-body',
+        '.upgrades-popup-content',
+    ].join(',');
+
+    document.addEventListener('touchmove', function(e) {
+        if (e.target.closest(SCROLLABLE)) return; // allow scroll inside these
+        e.preventDefault();
+    }, { passive: false });
 })();
 
 console.log('[game] module imports resolved OK');

@@ -2668,7 +2668,11 @@ function openUpgradesMenu() {
 
     // Block touchmove on the viewport so Telegram doesn't intercept vertical
     // swipes as "swipe-to-minimize" while the user is panning the skill tree.
-    viewport.addEventListener('touchstart', e => { e.preventDefault(); }, { passive: false });
+    // touchstart: only preventDefault for multi-touch (pinch) — single taps on
+    // nodes must not be blocked, otherwise click never fires on mobile.
+    viewport.addEventListener('touchstart', e => {
+        if (e.touches.length > 1) e.preventDefault();
+    }, { passive: false });
     viewport.addEventListener('touchmove',  e => { e.preventDefault(); }, { passive: false });
 
     viewport.addEventListener('pointerdown', e => {
