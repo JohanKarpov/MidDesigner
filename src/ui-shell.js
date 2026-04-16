@@ -1605,6 +1605,7 @@ function removeUpgradesOverlay() {
         // Stop rAF loop before removal
         const rafId = screen.__upgradesRaf;
         if (rafId) cancelAnimationFrame(rafId);
+        screen.__upgradesVpObserver?.disconnect();
         stopVoice();
         screen.remove();
         _ch1EventHook?.('ch1_upgrades_first_close');
@@ -2155,6 +2156,19 @@ function openUpgradesMenu() {
 
     let frameTime = 0;
 
+    // ── Viewport cache — updated by ResizeObserver instead of every frame ──
+    const _vp = { w: 1, h: 1, dpr: 1 };
+    function _updateVp() {
+        const rect = screen.getBoundingClientRect();
+        _vp.w   = Math.max(1, Math.round(rect.width));
+        _vp.h   = Math.max(1, Math.round(rect.height));
+        _vp.dpr = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
+    }
+    _updateVp();
+    const _vpObserver = new ResizeObserver(_updateVp);
+    _vpObserver.observe(screen);
+    screen.__upgradesVpObserver = _vpObserver;
+
     // ── Canvas refs ──
     const starfieldCanvas = screen.querySelector('[data-upgrades-starfield]');
     const edgesCanvas     = screen.querySelector('[data-upgrades-edges]');
@@ -2308,10 +2322,9 @@ function openUpgradesMenu() {
         cam.z += (cam.tz - cam.z) * 0.085;
 
         frameTime += 1;
-        const rect = screen.getBoundingClientRect();
-        const vW = Math.max(1, Math.round(rect.width));
-        const vH = Math.max(1, Math.round(rect.height));
-        const dpr = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
+        const vW  = _vp.w;
+        const vH  = _vp.h;
+        const dpr = _vp.dpr;
         const cx  = vW * 0.5;
         const cy  = vH * 0.5;
 
@@ -2652,6 +2665,11 @@ function openUpgradesMenu() {
         const dy = pts[0].clientY - pts[1].clientY;
         return Math.hypot(dx, dy);
     }
+
+    // Block touchmove on the viewport so Telegram doesn't intercept vertical
+    // swipes as "swipe-to-minimize" while the user is panning the skill tree.
+    viewport.addEventListener('touchstart', e => { e.preventDefault(); }, { passive: false });
+    viewport.addEventListener('touchmove',  e => { e.preventDefault(); }, { passive: false });
 
     viewport.addEventListener('pointerdown', e => {
         if (screen.classList.contains('intro-active')) return;

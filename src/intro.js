@@ -162,16 +162,26 @@ function typeText(text, targetEl, onDone) {
     targetEl.textContent = '';
     typing = true;
     let i = 0;
+    let _buf = '';
+    let _rafId = 0;
+
+    function flush() {
+        _rafId = 0;
+        targetEl.textContent = _buf;
+    }
 
     function tick() {
-        if (gen !== _typeGeneration) return; // stale — a newer typeText call started
+        if (gen !== _typeGeneration) { cancelAnimationFrame(_rafId); return; } // stale
         if (i >= text.length) {
+            cancelAnimationFrame(_rafId);
+            targetEl.textContent = _buf; // flush final state immediately
             typing = false;
             onDone?.();
             return;
         }
         const ch = text[i++];
-        targetEl.textContent += ch;
+        _buf += ch;
+        if (!_rafId) _rafId = requestAnimationFrame(flush); // batch DOM write to next frame
         const delay = i === 1 ? 12 : /[.!?,;]/.test(ch) ? 38 : 18;
         pendingTimeoutId = setTimeout(tick, delay);
     }
