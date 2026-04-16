@@ -1,0 +1,66 @@
+/* orders-sandbox.css — minimal glue to scale the Figma layout exported as fixed px
+   This file intentionally keeps original px coordinates and relies on transform:scale(var(--r))
+   so it matches the existing `sandbox` scaling approach. */
+
+:root { /* rely on sandbox.css for --cw --r; if missing, provide fallbacks */
+  --r: 1;
+}
+
+.menu-orders {
+  width: 1080px;
+  height: 1920px;
+  position: relative;
+  transform: scale(var(--r));
+  transform-origin: top left;
+  margin: 0 auto;
+  background: transparent;
+}
+
+.menu-base-bg, .bg, .menu-border, .Mask-group, .image-1862, .image-1861,
+.footer-zone, .footer-bg, .back-button, .orders-body,
+.Header, .ava-group, .ava-bg-blue, .ava-head-hw1,
+.top-line, .BitTrick25, .info-zone, .name-zone, .lvl-zone,
+.menu-stat-zone, .fame-stars {
+  position: absolute;
+}
+
+.menu-base-bg { left: 0; top: 0; width: calc(var(--r) * 1080); height: calc(var(--r) * 1920); }
+.bg { left:0; top:0; width: calc(var(--r) * 1080); height: calc(var(--r) * 1920); background:#F0D8C1; }
+.menu-border { left:0; top:0; width: calc(var(--r) * 1080); height: calc(var(--r) * 1920); visibility:visible; background-image: url('UI/task-menu/menu-border.png'); background-size:cover; }
+.Mask-group { left:0; top:calc(var(--r) * 289); width: calc(var(--r) * 1080); height: calc(var(--r) * 1631); overflow:hidden; }
+.image-1862 { left:0; top:calc(var(--r) * 289); width: calc(var(--r) * 1080); height: calc(var(--r) * 1631); background: linear-gradient(0deg, rgba(255,255,255,0.75) 0%, rgba(255,255,255,0) 60.24%); }
+.image-1861 { left:0; top:calc(var(--r) * 837); width: calc(var(--r) * 1080); height: calc(var(--r) * 1082); background-image: url('UI/task-menu/image.png'); background-size:cover; }
+
+.footer-zone { left:0; top:calc(var(--r) * 1739); width: calc(var(--r) * 1080); height: calc(var(--r) * 181); }
+.footer-bg { left:0; top:calc(var(--r) * 1739); width: calc(var(--r) * 1080); height: calc(var(--r) * 181); background-image: url('UI/task-menu/footer-zone.png'); background-size:cover; }
+.back-button { left:calc(var(--r) * 320); top:calc(var(--r) * 1761); width: calc(var(--r) * 440); height: calc(var(--r) * 159); background:transparent; border:none; }
+.back-button img { width:100%; height:100%; object-fit:contain; }
+
+.orders-body { left:calc(var(--r) * 35); top:calc(var(--r) * 338); width: calc(var(--r) * 1012); height: calc(var(--r) * 1399); overflow:hidden; }
+.orders-scroll { position:absolute; left:0; top:0; right:0; bottom:0; overflow-y:auto; padding: calc(var(--r) * 12); }
+
+.Header { left:0; top:0; width:calc(var(--r) * 1080); height:calc(var(--r) * 343); }
+.ava-group { left:calc(var(--r) * 39); top:calc(var(--r) * 5); width:calc(var(--r) * 322); height:calc(var(--r) * 312); }
+.ava-bg-blue { left:calc(var(--r) * 39); top:calc(var(--r) * 36); width:calc(var(--r) * 281); height:calc(var(--r) * 281); }
+.ava-head-hw1 { left:calc(var(--r) * 39); top:calc(var(--r) * 5); width:calc(var(--r) * 322); height:calc(var(--r) * 299); }
+.top-line { left:calc(var(--r) * 19); top:calc(var(--r) * 343); width:calc(var(--r) * 1040); height:0; border: calc(var(--r) * 10) solid #2E2519; }
+.BitTrick25 { left:calc(var(--r) * 375); top:calc(var(--r) * 36); font-family: Tiny5, monospace; font-size:calc(var(--r) * 96); color:#2E2519; }
+
+.info-zone { left:calc(var(--r) * 375); top:calc(var(--r) * 141); width:calc(var(--r) * 615); height:calc(var(--r) * 166); }
+.name-zone { left:calc(var(--r) * 375); top:calc(var(--r) * 141); width:calc(var(--r) * 615); height:calc(var(--r) * 75); }
+.name-plate { left:calc(var(--r) * 375); top:calc(var(--r) * 141); width:calc(var(--r) * 615); height:calc(var(--r) * 75); background:#46C1FF; border-radius:calc(var(--r) * 15); }
+.name-text { left:calc(var(--r) * 403); top:calc(var(--r) * 155); width:calc(var(--r) * 551); height:calc(var(--r) * 48); font-size:calc(var(--r) * 48); color:#fff; position:absolute; }
+.lvl-zone { left:calc(var(--r) * 375); top:calc(var(--r) * 232); width:calc(var(--r) * 164); height:calc(var(--r) * 75); }
+.lvl-plate { left:calc(var(--r) * 375); top:calc(var(--r) * 232); width:calc(var(--r) * 164); height:calc(var(--r) * 75); background:#46C1FF; border-radius:calc(var(--r) * 15); }
+.lvl-text { left:calc(var(--r) * 403); top:calc(var(--r) * 246); width:calc(var(--r) * 108); height:calc(var(--r) * 48); font-size:calc(var(--r) * 48); color:#fff; position:absolute; }
+
+.menu-stat-zone { left:calc(var(--r) * 540); top:calc(var(--r) * 232); width:calc(var(--r) * 450); height:calc(var(--r) * 75); }
+.menu-stat-bg { left:calc(var(--r) * 540); top:calc(var(--r) * 232); width:calc(var(--r) * 450); height:calc(var(--r) * 75); background:#46C1FF; border-radius:calc(var(--r) * 15); }
+.fame-label { left:calc(var(--r) * 570); top:calc(var(--r) * 243); position:absolute; color:#fff; font-size:calc(var(--r) * 48); }
+.fame-stars { left:calc(var(--r) * 708); top:calc(var(--r) * 246); width:calc(var(--r) * 240); height:calc(var(--r) * 48); background-image: url('UI/task-menu/fame-stars.png'); background-size:contain; background-repeat:no-repeat; }
+.fame-fill { position:absolute; left:0; top:0; bottom:0; width:0%; background:linear-gradient(90deg,#ffd700,#ffb700); mix-blend-mode:screen; }
+
+/* basic accessibility focus styles */
+[contenteditable] { outline: 2px dashed rgba(255,255,255,0.08); padding:4px; }
+
+@media (max-width:900px){ .menu-orders { transform: scale(calc(var(--cw,900)/1080)); } }

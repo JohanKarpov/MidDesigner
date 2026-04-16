@@ -1,0 +1,30 @@
+cap - c
+1 - black
+
+hoodie - h
+1 - black
+
+tshirt - t
+1 - white
+2 - black
+3 - minon
+
+pants - p
+1 - grey
+2 - black
+3 - shorts
+
+socks - s
+1 - old
+2 - white
+3 - black
+4 - pink
+
+costume - Pixel* (* = costume tag)
+1. Casual
+2. Office
+3. Clown
+4. Beach
+5. Opium
+6. Minion
+7. Viktor

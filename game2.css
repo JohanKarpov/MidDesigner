@@ -1,0 +1,81 @@
+/* ─── game2.css ───────────────────────────────────────────────────────────────
+   Bridge and overrides for game2.html.
+   Load order: sandbox.css → style.css → game2.css (this file wins on conflicts).
+
+   KEY RULES:
+   - sandbox.css uses --cw / --ch / --r
+   - style.css uses --container-width (capped at 900px) and sets overflow:visible
+     on .game-container — we must override both.
+   - Cinematic overlay is shown/hidden via CSS classes (.active / .visible),
+     NOT via inline display or aria-hidden. intro.js must use classList.
+   - Do NOT add overflow:hidden to .menu-header — divider overflows intentionally.
+──────────────────────────────────────────────────────────────────────────────── */
+
+/* ── Fix style.css .game-container conflicts ─────────────────────────────── */
+.game-container {
+    /* Use sandbox.css responsive variables (style.css caps at 900px) */
+    width: var(--cw) !important;
+    height: var(--ch) !important;
+    /* Clip sidebars / overlays properly */
+    overflow: hidden !important;
+    /* Remove old-game decorative border */
+    border: none !important;
+    border-radius: 0 !important;
+    max-height: none !important;
+    /* Restore background (style.css sets transparent) */
+    background-color: var(--col-bg) !important;
+    background-image: url("bg/bg_1.png") !important;
+    background-size: cover !important;
+    background-position: center !important;
+}
+
+/* ── Bridge: align style.css --container-* vars with sandbox.css --cw/--ch ── */
+:root {
+    --container-width: var(--cw);
+    --container-height: var(--ch);
+}
+
+/* ── Cinematic overlay: style.css shows it via .active class ─────────────── */
+/* Overlay itself has pointer-events:none — override when active */
+.cinematic-overlay.active {
+    pointer-events: auto !important;
+}
+
+/* Skip button always clickable (style.css already sets pointer-events:auto, belt+suspenders) */
+.cinematic-skip-btn {
+    pointer-events: auto !important;
+}
+
+/* ── Sidebar notification badges ─────────────────────────────────────────── */
+/*
+   Badges live inside .sidebar (not .sbtn) so they're not clipped.
+   .sidebar has overflow:visible by default (sandbox.css doesn't set overflow on it).
+   Positions mirror .sbtn top positions + offset up-right from button corner.
+   Right sidebar buttons: left = r*77.89, width = r*120 → right edge at r*197.89
+   Tops: sbtn--0=22, sbtn--1=164, sbtn--2=306, sbtn--3=448
+*/
+.sbtn-badge {
+    position: absolute;
+    width: calc(var(--r) * 44);
+    height: calc(var(--r) * 44);
+    pointer-events: none;
+    z-index: 20;
+    opacity: 0;
+    transform: scale(0.4);
+    transition: opacity 0.2s ease, transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.sbtn-badge.visible {
+    opacity: 1;
+    transform: scale(1);
+}
+
+/* Badge anchor: top-right corner of its corresponding sbtn */
+/* right sidebar: sbtn left=r*77.89, so right edge = r*(77.89+120)=r*197.89; badge right = r*(489-197.89-44)=r*247 */
+.sidebar--right .sbtn-badge { right: calc(var(--r) * 247); }
+.sidebar--left  .sbtn-badge { left:  calc(var(--r) * 247); }
+
+.sbtn-badge[data-for="0"] { top: calc(var(--r) * 2);   }
+.sbtn-badge[data-for="1"] { top: calc(var(--r) * 144); }
+.sbtn-badge[data-for="2"] { top: calc(var(--r) * 286); }
+.sbtn-badge[data-for="3"] { top: calc(var(--r) * 428); }

@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Mid_Designer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Tiny5&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="game-frame">
+        <div class="game-container">
+            <div class="top-bar">
+                <div class="top-left">
+                    <button class="counter counter-tasks" type="button" id="orders-btn" aria-label="Orders">
+                        <span class="icon icon-tasks"></span>
+                        <span class="orders-alert" id="orders-alert" aria-hidden="true"></span>
+                        <span class="counter-value" id="orders-value">12</span>
+                    </button>
+                </div>
+                <div class="top-center">
+                    <button class="counter counter-funds" type="button" id="funds-btn" aria-label="Funds">
+                        <span class="icon icon-funds"></span>
+                        <span class="counter-value" id="funds-value">100₽</span>
+                    </button>
+                </div>
+                <div class="top-right">
+                    <button class="menu-btn" id="menu-btn" type="button" aria-label="Menu">
+                        <span class="sr-only">Menu</span>
+                    </button>
+                </div>
+            </div>
+
+            <button class="generate-btn" id="generate-btn">GENERATE</button>
+
+            <img class="character-sprite" id="character-sprite" src="images/PixelEgorus/PixE-Idle-1.png" alt="Character" />
+
+            <div class="level-panel" aria-label="Level progress">
+                <div class="level-label" id="level-label">Lvl 1</div>
+                <div class="level-track">
+                    <div class="level-fill" id="level-fill"></div>
+                </div>
+            </div>
+
+            <div class="stress-panel" aria-label="Stress meter">
+                <div class="stress-label" id="stress-label">Stress 0/100</div>
+                <div class="stress-track">
+                    <div class="stress-fill" id="stress-fill"></div>
+                </div>
+            </div>
+
+            <div class="autogen-toggle-panel" id="autogen-toggle-panel" aria-label="Autogen controls">
+                <button class="autogen-toggle" id="autogen-toggle" type="button" aria-pressed="false" aria-label="Autogen is disabled">
+                    <span class="autogen-toggle-dot" id="autogen-toggle-dot" aria-hidden="true"></span>
+                    <span class="autogen-toggle-label" id="autogen-toggle-label">AUTO<br>OFF</span>
+                </button>
+            </div>
+
+            <div class="current-task-label" id="current-task-label" aria-live="polite"></div>
+
+            <div class="task-timer-panel" id="task-timer-panel" aria-label="Task timer">
+                <div class="task-timer-fill" id="task-timer-fill"></div>
+            </div>
+
+            <div class="menu-overlay" id="main-menu-overlay" aria-hidden="true">
+                <div class="menu-window">
+                    <div class="menu-content">
+                        <div class="menu-settings">
+                            <h2 class="settings-title">SETTINGS</h2>
+
+                            <div class="settings-grid">
+                                <button class="settings-tile" id="music-toggle" type="button" aria-pressed="true" aria-label="Music On">
+                                    <img class="settings-icon" id="music-icon" src="images/icons/icon-music-on.png" alt="Music">
+                                    <span class="settings-label">MUSIC</span>
+                                </button>
+
+                                <button class="settings-tile" id="sfx-toggle" type="button" aria-pressed="true" aria-label="SFX On">
+                                    <img class="settings-icon" id="sfx-icon" src="images/icons/icon-sound-on.png" alt="SFX">
+                                    <span class="settings-label">SFX</span>
+                                </button>
+
+                                <button class="settings-tile" id="achievements-open-btn" type="button" aria-label="Open achievements">
+                                    <img class="settings-icon" src="images/icons/icon-achievments.png" alt="Achievements">
+                                    <span class="settings-label">DEEDS</span>
+                                </button>
+
+                                <button class="settings-tile" id="stats-open-btn" type="button" aria-label="Open stats">
+                                    <img class="settings-icon" src="images/icons/icon-stats.png" alt="Stats">
+                                    <span class="settings-label">STATS</span>
+                                </button>
+                            </div>
+
+                            <div class="lang-toggle" id="lang-toggle">
+                                <button class="lang-btn" id="lang-btn-en" type="button">EN</button>
+                                <span class="lang-sep">|</span>
+                                <button class="lang-btn" id="lang-btn-ru" type="button">RU</button>
+                            </div>
+
+                            <button class="settings-escape-btn" id="reset-progress-btn" type="button" aria-label="Reset progress">
+                                <img class="settings-escape-icon" src="images/icons/icon-restart.png" alt="Reset progress">
+                                <span class="settings-escape-label">ESCAPE TO<br>WILDERNESS</span>
+                            </button>
+
+                            <div class="reset-confirm" id="reset-confirm" hidden>
+                                <p>Your progress will be lost. Continue?</p>
+                                <div class="reset-confirm-actions">
+                                    <button class="menu-action-btn danger" id="confirm-reset-btn" type="button">Yes, reset</button>
+                                    <button class="menu-action-btn" id="cancel-reset-btn" type="button">Cancel</button>
+                                </div>
+                                <button class="menu-action-btn danger debug-reset-btn" id="debug-full-reset-btn" type="button">Full reset (for testers)</button>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="menu-close" type="button">Close</button>
+                </div>
+            </div>
+
+            <div class="menu-overlay" id="stats-menu" aria-hidden="true">
+                <div class="menu-window">
+                    <div class="menu-content stats-menu-content">
+                        <section class="stats-view">
+                            <h2 class="stats-view-title">Stats</h2>
+                            <div class="stats-panel" id="stats-panel" aria-live="polite"></div>
+                            <div class="stats-actions">
+                                <button id="stats-back-btn" type="button" aria-label="Close stats">
+                                    <img src="images/icon-back.png" alt="Back">
+                                </button>
+                            </div>
+                        </section>
+                    </div>
+                    <button class="menu-close" type="button">Close</button>
+                </div>
+            </div>
+
+            <div class="menu-overlay" id="achievements-menu" aria-hidden="true">
+                <div class="menu-window">
+                    <div class="menu-content achievements-menu-content">
+                        <section class="achievements-view">
+                            <h2 class="stats-view-title">Achievements</h2>
+                            <div class="achievements-list" id="achievements-list" aria-live="polite"></div>
+                            <div class="stats-actions">
+                                <button id="achievements-back-btn" type="button" aria-label="Close achievements">
+                                    <img src="images/icon-back.png" alt="Back">
+                                </button>
+                            </div>
+                        </section>
+                    </div>
+                    <button class="menu-close" type="button">Close</button>
+                </div>
+            </div>
+
+            <div class="menu-overlay" id="orders-menu" aria-hidden="true">
+                <div class="menu-window">
+                    <div class="menu-content bittrick-menu-content">
+                        <section class="bittrick-hub-view" id="bittrick-hub-view" aria-label="Task categories">
+                            <h2 class="bittrick-hub-title">BitTrick 25</h2>
+                            <div class="bittrick-hub-buttons" role="tablist" aria-label="Task categories">
+                                <button class="bittrick-hub-btn" id="bittrick-hub-orders" type="button" data-category="orders" aria-label="Orders">
+                                    <img src="images/menu-bittrick-orders.png" alt="" aria-hidden="true">
+                                    <span>Orders</span>
+                                </button>
+                                <button class="bittrick-hub-btn" id="bittrick-hub-story" type="button" data-category="story" aria-label="Main Story">
+                                    <img src="images/menu-bittrick-story.png" alt="" aria-hidden="true">
+                                    <span>Story</span>
+                                </button>
+                                <button class="bittrick-hub-btn" id="bittrick-hub-research" type="button" data-category="research" aria-label="Research">
+                                    <img src="images/menu-bittrick-research.png" alt="" aria-hidden="true">
+                                    <span>Research</span>
+                                </button>
+                                <button class="bittrick-hub-btn" id="bittrick-hub-promotion" type="button" data-category="promotion" aria-label="Promotion">
+                                    <img src="images/menu-bittrick-social_media.png" alt="" aria-hidden="true">
+                                    <span>Promotion</span>
+                                </button>
+                            </div>
+                        </section>
+
+                        <section class="bittrick-category-view" id="bittrick-category-view" aria-label="Category tasks" hidden>
+                            <h2 class="bittrick-category-title" id="bittrick-category-title">Orders</h2>
+                            <div class="orders-list" id="orders-list" aria-live="polite"></div>
+                            <div class="category-counters" id="category-counters"></div>
+                            <div class="orders-actions bittrick-actions">
+                                <button id="start-work-btn" type="button" aria-disabled="true">Start</button>
+                                <button id="orders-back-btn" type="button" aria-label="Back to categories">
+                                    <img src="images/icon-back.png" alt="Back">
+                                </button>
+                            </div>
+                        </section>
+                    </div>
+                    <button class="menu-close" type="button">Close</button>
+                </div>
+            </div>
+
+            <div class="menu-overlay" id="shop-menu" aria-hidden="true">
+                <div class="menu-window">
+                    <div class="menu-content shop-menu-content">
+                        <section class="shop-hub-view" id="shop-hub-view" aria-label="Shop categories">
+                            <h2 class="shop-hub-title">SHOP</h2>
+                            <div class="shop-hub-buttons" role="tablist" aria-label="Shop categories">
+                                <button class="shop-hub-btn" type="button" data-shop-category="upgrades" aria-label="Upgrades">
+                                    <img src="images/menu-shop-upgrades.png" alt="" aria-hidden="true">
+                                    <span>Upgrades</span>
+                                </button>
+                                <button class="shop-hub-btn" type="button" data-shop-category="goods" aria-label="Goods">
+                                    <img src="images/menu-shop-shop.png" alt="" aria-hidden="true">
+                                    <span>Goods</span>
+                                </button>
+                                <button class="shop-hub-btn" type="button" data-shop-category="property" aria-label="Property">
+                                    <img src="images/menu-shop-home.png" alt="" aria-hidden="true">
+                                    <span>Property</span>
+                                </button>
+                                <button class="shop-hub-btn" type="button" data-shop-category="clothes" aria-label="Clothes">
+                                    <img src="images/menu-shop-clothes.png" alt="" aria-hidden="true">
+                                    <span>Clothes</span>
+                                </button>
+                            </div>
+                            <div class="shop-debug-actions">
+                                <button class="menu-action-btn danger shop-debug-intro-btn" id="shop-debug-intro-btn" type="button">DEBUG: UPGRADES INTRO</button>
+                            </div>
+                        </section>
+
+                        <section class="shop-category-view" id="shop-category-view" aria-label="Shop category content" hidden>
+                            <h2 class="shop-category-title" id="shop-category-title">Goods</h2>
+                            <div class="shop-category-list" id="shop-category-list" aria-live="polite"></div>
+                            <div class="category-counters" id="shop-counters"></div>
+                            <div class="shop-actions">
+                                <button id="shop-back-btn" type="button" aria-label="Back to shop categories">
+                                    <img src="images/icon-back.png" alt="Back">
+                                </button>
+                            </div>
+                        </section>
+                    </div>
+                    <button class="menu-close" type="button">Close</button>
+                </div>
+            </div>
+
+            <div class="cinematic-overlay" id="cinematic-overlay" aria-hidden="true">
+                <div class="cinematic-black" id="cinematic-black"></div>
+                <div class="cinematic-flash" id="cinematic-flash"></div>
+                <div class="cinematic-split" id="cinematic-split">
+                    <div class="split-half split-top"></div>
+                    <div class="split-half split-bottom"></div>
+                </div>
+                <div class="spotlight-ring" id="spotlight-ring" aria-hidden="true"></div>
+
+                <button class="cinematic-skip-btn" id="cinematic-skip-btn" type="button">Skip</button>
+
+                <img class="phone-hand" id="phone-hand" src="images/cinematic/phone-hand.png" alt="Phone in hand" />
+
+                <div class="thought-box" id="thought-box" aria-live="polite">
+                    <p id="thought-text"></p>
+                    <button class="dialog-next-btn" id="thought-next-btn" type="button">Next</button>
+                </div>
+
+                <div class="vn-dialog" id="vn-dialog" aria-live="polite">
+                    <div class="vn-speaker-row">
+                        <img class="vn-speaker-icon" id="vn-speaker-icon" src="images/cinematic/gg-icon.png" alt="">
+                        <span class="vn-speaker-name" id="vn-speaker-name"></span>
+                    </div>
+                    <p class="vn-text" id="vn-text"></p>
+                    <div class="vn-actions">
+                        <button class="dialog-next-btn" id="vn-next-btn" type="button">Next</button>
+                    </div>
+                </div>
+
+                <div class="tutorial-choice" id="tutorial-choice" aria-hidden="true">
+                    <button class="choice-btn" id="tutorial-continue-btn" type="button">Let's go!</button>
+                    <button class="choice-btn ghost" id="tutorial-skip-btn" type="button">I remember everything</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="orders-data.js"></script>
+    <script src="achievements-data.js"></script>
+    <script src="tutorial-data.js"></script>
+    <script src="layout-overrides.js"></script>
+    <script src="script.js"></script>
+
+    <!-- Meeting Cinematic Overlay -->
+    <div class="meeting-cinematic" id="meeting-cinematic" aria-hidden="true">
+        <div class="meeting-cinematic-bg"></div>
+        <div class="meeting-cinematic-content">
+            <div class="meeting-cinematic-dialog">
+                <div class="meeting-cinematic-speaker-row">
+                    <img class="meeting-cinematic-speaker-icon" src="" alt="">
+                    <span class="meeting-cinematic-speaker"></span>
+                </div>
+                <p class="meeting-cinematic-text"></p>
+                <div class="meeting-cinematic-hint">Нажми, чтобы продолжить</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chapter End Popup -->
+    <div class="chapter-end-popup" id="chapter-end-popup" aria-hidden="true">
+        <div class="chapter-end-popup-inner">
+            <img class="chapter-end-image" src="images/cinematic/chapter1-end.png" alt="Контракт подписан" onerror="this.style.display='none'">
+            <p class="chapter-end-title">Аут подписан</p>
+            <p class="chapter-end-subtitle">Добро пожаловать в OutisticDigital</p>
+            <button class="chapter-end-btn" id="chapter-end-close-btn" type="button">Продолжить</button>
+        </div>
+    </div>
+
+</body>
+</html>

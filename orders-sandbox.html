@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Orders Sandbox</title>
+  <link rel="stylesheet" href="sandbox.css">
+  <link rel="stylesheet" href="orders-sandbox.css">
+</head>
+<body>
+  <div class="game-frame">
+    <div class="game-container">
+      <div class="menu-orders" role="application" aria-label="Orders menu">
+
+        <div class="menu-base-bg"></div>
+        <div class="bg"></div>
+        <div class="menu-border"></div>
+
+        <div class="Mask-group">
+          <div class="image-1862"></div>
+          <div class="image-1861"></div>
+        </div>
+
+        <header class="Header">
+          <div class="ava-group">
+            <img class="ava-bg-blue" src="UI/task-menu/ava-bg-blue.png" alt="avatar bg">
+            <img class="ava-head-hw1" src="UI/task-menu/ava-head-hw1.png" alt="avatar">
+          </div>
+
+          <div class="top-line" aria-hidden="true"></div>
+
+          <h1 class="BitTrick25">Orders</h1>
+
+          <div class="info-zone">
+            <div class="name-zone">
+              <div class="name-plate"></div>
+              <div id="name-text" class="name-text" contenteditable="true" aria-label="Player name">Current title</div>
+            </div>
+
+            <div class="lvl-zone">
+              <div class="lvl-plate"></div>
+              <div id="lvl-text" class="lvl-text" contenteditable="true" aria-label="Level">Lvl: 1</div>
+            </div>
+
+            <div class="menu-stat-zone">
+              <div class="menu-stat-bg"></div>
+              <div class="fame-label">Fame:</div>
+              <div class="fame-stars">
+                <div class="fame-fill" aria-hidden="true"></div>
+              </div>
+            </div>
+          </div>
+        </header>
+
+        <main class="orders-body" aria-live="polite">
+          <div class="orders-inner" style="position:relative; left:0; top:5px;">
+            <div class="orders-scroll">
+              <!-- Cards will be inserted here later -->
+            </div>
+          </div>
+        </main>
+
+        <div class="footer-zone">
+          <div class="footer-bg"></div>
+          <button id="back-btn" class="back-button" aria-label="Back">
+            <img src="UI/task-menu/back-button.png" alt="Back">
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script src="orders-sandbox.js"></script>
+</body>
+</html>

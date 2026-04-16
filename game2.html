@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>MidDesigner</title>
+    <link rel="icon" type="image/png" href="UI/icons/icon-menu-button.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Tiny5&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="sandbox.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="game-frame">
+        <div class="game-container">
+
+            <!-- ─── PROPERTY BG LAYERS ─── -->
+            <img id="bg-layer-abandoned-floor"   class="bg-layer" src="bg/bg-floor-1.png"   alt="" hidden>
+            <img id="bg-layer-abandoned-walls"   class="bg-layer" src="bg/bg-walls-1.png"   alt="" hidden>
+            <img id="bg-layer-abandoned-ceiling" class="bg-layer" src="bg/bg-ceiling-1.png" alt="" hidden>
+            <img id="bg-layer-abandoned-bed"     class="bg-layer" src="bg/bg-bed-1.png"     alt="" hidden>
+            <img id="bg-layer-abandoned-carpet"  class="bg-layer" src="bg/bg-carpet-1.png"  alt="" hidden>
+            <img id="bg-layer-abandoned-window"  class="bg-layer" src="bg/bg-window-1.png"  alt="" hidden>
+
+            <!-- ─── FOOTER GRADIENT ─── -->
+            <div class="ftr-gradient"></div>
+
+            <!-- ─── CHARACTER SPRITE ─── -->
+            <img class="character-sprite" id="character-sprite"
+                 src="images/PixelEgorus/PixE-Idle-1.png" alt="">
+
+            <!-- ─── HEADER BACKGROUND ─── -->
+            <div class="hdr"></div>
+
+            <!-- ─── MONEY COUNTER ─── -->
+            <div class="money-counter">
+                <img class="cnt-icon" src="UI/icons/icon-funds.png" alt="">
+                <img class="cnt-frame" src="UI/menu-text-frame-money.png" alt="">
+                <span class="cnt-value" id="money-value">0 ₽</span>
+            </div>
+
+            <!-- ─── PRESTIGE COUNTER ─── -->
+            <div class="prestige-counter">
+                <img class="cnt-icon" src="UI/icons/icon-counter-prestige.png" alt="">
+                <img class="cnt-frame" src="UI/menu-text-frame-counter.png" alt="">
+                <span class="cnt-value" id="prestige-value">0</span>
+            </div>
+
+            <!-- ─── CIG COUNTER ─── -->
+            <div class="cig-counter">
+                <img class="cnt-icon" src="UI/icons/icon-counter-cig.png" alt="">
+                <img class="cnt-frame" src="UI/menu-text-frame-counter.png" alt="">
+                <span class="cnt-value" id="cig-value">0</span>
+            </div>
+
+            <!-- ─── XP BAR ─── -->
+            <div class="xp-bar">
+                <div class="xp-fill" style="width: 0%"></div>
+                <span class="xp-text">0 / 100</span>
+            </div>
+
+            <!-- ─── LVL BADGE ─── -->
+            <div class="lvl-badge">Lvl: 1</div>
+
+            <!-- ─── FIXED RIGHT MENU BUTTONS (settings / shop / upgrades) ─── -->
+            <button class="fmenu-btn fmenu-btn--menu" id="menu-btn">
+                <img src="UI/icons/icon-menu-button.png" alt="Menu">
+            </button>
+            <button class="fmenu-btn fmenu-btn--shop" id="shop-btn">
+                <img src="UI/icons/icon-menu-shop.png" alt="Shop">
+            </button>
+            <button class="fmenu-btn fmenu-btn--upgrades" id="upgrades-btn">
+                <img src="UI/icons/icon-upgrade.png" alt="Upgrades">
+            </button>
+
+            <!-- ─── RIGHT SIDEBAR ─── -->
+            <div class="sidebar sidebar--right" id="right-sidebar" data-state="icons">
+                <div class="sidebar-bg" id="right-toggle"></div>
+                <button class="sbtn sbtn--0" id="orders-btn">
+                    <img class="sbtn-frame" src="UI/icons/icon-stone_frame.png" alt="">
+                    <img class="sbtn-icon" src="UI/icons/icon-orders.png" alt="Orders">
+                </button>
+                <button class="sbtn sbtn--1" id="story-btn">
+                    <img class="sbtn-frame" src="UI/icons/icon-stone_frame.png" alt="">
+                    <img class="sbtn-icon" src="UI/icons/icon-story.png" alt="Story">
+                </button>
+                <button class="sbtn sbtn--2" id="research-btn">
+                    <img class="sbtn-frame" src="UI/icons/icon-stone_frame.png" alt="">
+                    <img class="sbtn-icon" src="UI/icons/icon-research.png" alt="Research">
+                </button>
+                <button class="sbtn sbtn--3" id="promo-btn">
+                    <img class="sbtn-frame" src="UI/icons/icon-stone_frame.png" alt="">
+                    <img class="sbtn-icon" src="UI/icons/icon-promo.png" alt="Promo">
+                </button>
+                <span class="sbtn-label sbtn-label--0" aria-hidden="true">Orders</span>
+                <span class="sbtn-label sbtn-label--1" aria-hidden="true">Story</span>
+                <span class="sbtn-label sbtn-label--2" aria-hidden="true">Research</span>
+                <span class="sbtn-label sbtn-label--3" aria-hidden="true">Promo</span>
+            </div>
+
+            <!-- ─── RESEARCH POOL BAR ─── -->
+            <div class="research-pool-wrap" id="research-pool-wrap">
+                <div class="research-pool-bar" id="research-pool-bar">
+                    <div class="research-pool-fill" id="research-pool-fill"></div>
+                </div>
+                <span class="research-pool-label" id="research-pool-label"></span>
+            </div>
+
+            <!-- ─── LEFT SIDEBAR ─── -->
+            <div class="sidebar sidebar--left" id="left-sidebar" data-state="icons">
+                <div class="sidebar-bg" id="left-toggle"></div>
+                <button class="sbtn sbtn--0" id="ai-model-btn">
+                    <img class="sbtn-frame" src="UI/icons/icon-stone_frame.png" alt="">
+                    <img class="sbtn-icon" src="UI/icons/icon-ai_model.png" alt="AI Model">
+                </button>
+                <button class="sbtn sbtn--1" id="network-btn">
+                    <img class="sbtn-frame" src="UI/icons/icon-stone_frame.png" alt="">
+                    <img class="sbtn-icon" src="UI/icons/icon-network.png" alt="Network">
+                </button>
+                <button class="sbtn sbtn--2" id="hardware-btn">
+                    <img class="sbtn-frame" src="UI/icons/icon-stone_frame.png" alt="">
+                    <img class="sbtn-icon" src="UI/icons/icon-hardware.png" alt="Hardware">
+                </button>
+                <button class="sbtn sbtn--3" id="deep-learning-btn">
+                    <img class="sbtn-frame" src="UI/icons/icon-stone_frame.png" alt="">
+                    <img class="sbtn-icon" src="UI/icons/icon-deep_learning.png" alt="Deep Learning">
+                </button>
+                <span class="sbtn-label sbtn-label--0" aria-hidden="true">AI Model</span>
+                <span class="sbtn-label sbtn-label--1" aria-hidden="true">Network</span>
+                <span class="sbtn-label sbtn-label--2" aria-hidden="true">Hardware</span>
+                <span class="sbtn-label sbtn-label--3" aria-hidden="true">Deep Learning</span>
+            </div>
+
+            <!-- ─── STRESS BAR ─── -->
+            <div class="bar bar--stress">
+                <div class="bar-fill" style="width: 0%"></div>
+                <span class="bar-label">Stress</span>
+            </div>
+
+            <!-- ─── AGENT TOGGLE ─── -->
+            <button class="toggle-btn" id="agent-toggle" data-active="false">🤖</button>
+
+            <!-- ─── GENERATE BUTTON ─── -->
+            <button class="gen-btn" id="generate-btn">
+                <img src="UI/main-button.png" alt="">
+                <span class="gen-btn-label" id="gen-btn-label">Генерировать</span>
+            </button>
+
+            <!-- ─── AUTOGEN TOGGLE ─── -->
+            <button class="toggle-btn" id="autogen-toggle" data-active="false" hidden>⚙️</button>
+
+            <!-- ─── TASK TIMER ─── -->
+            <div class="task-timer">
+                <div class="task-timer-fill" style="width: 0%"></div>
+            </div>
+
+            <!-- ─── REPEAT CONTROLS (shown for repeatable active tasks) ─── -->
+            <button class="task-repeat-btn" id="task-repeat-btn" data-mode="start" hidden type="button"></button>
+
+            <!-- ─── CINEMATIC OVERLAY ─── -->
+            <div class="cinematic-overlay" id="cinematic-overlay" aria-hidden="true">
+                <div class="cinematic-black" id="cinematic-black"></div>
+                <div class="cinematic-flash" id="cinematic-flash"></div>
+                <div class="cinematic-split" id="cinematic-split">
+                    <div class="split-half split-top"></div>
+                    <div class="split-half split-bottom"></div>
+                </div>
+                <div class="spotlight-ring" id="spotlight-ring" aria-hidden="true"></div>
+
+                <button class="cinematic-skip-btn" id="cinematic-skip-btn" type="button">Skip</button>
+
+                <img class="phone-hand" id="phone-hand" src="images/cinematic/phone-hand.png" alt="Phone in hand" />
+
+                <div class="thought-box" id="thought-box" aria-live="polite">
+                    <p id="thought-text"></p>
+                    <button class="dialog-next-btn" id="thought-next-btn" type="button">Next</button>
+                </div>
+
+                <div class="vn-dialog" id="vn-dialog" aria-live="polite">
+                    <div class="vn-speaker-row">
+                        <img class="vn-speaker-icon" id="vn-speaker-icon" src="images/cinematic/gg-icon.png" alt="">
+                        <span class="vn-speaker-name" id="vn-speaker-name"></span>
+                    </div>
+                    <p class="vn-text" id="vn-text"></p>
+                    <div class="vn-actions">
+                        <button class="dialog-next-btn" id="vn-next-btn" type="button">Next</button>
+                    </div>
+                </div>
+
+                <div class="tutorial-choice" id="tutorial-choice" aria-hidden="true">
+                    <button class="choice-btn" id="tutorial-continue-btn" type="button">Let's go!</button>
+                    <button class="choice-btn ghost" id="tutorial-skip-btn" type="button">I remember everything</button>
+                </div>
+            </div>
+
+            <!-- ─── PM MEETING OVERLAY ─── -->
+            <div class="meeting-overlay" id="meeting-overlay" aria-hidden="true">
+                <div class="meeting-bg" aria-hidden="true"></div>
+                <img class="meeting-manager-img" src="images/cinematic/manager-outistic-smile.png" alt="Manager" draggable="false" />
+                <div class="meeting-dialog-box">
+                    <div class="meeting-speaker-row">
+                        <img class="meeting-speaker-icon" src="" alt="" />
+                        <span class="meeting-speaker-name"></span>
+                    </div>
+                    <p class="meeting-text"></p>
+                    <button class="meeting-next-btn" type="button">▶</button>
+                </div>
+            </div>
+
+        </div><!-- /game-container -->
+    </div><!-- /game-frame -->
+
+    <!-- ─── TEMPLATES ─── -->
+
+    <!-- ─── SETTINGS MENU TEMPLATE ─── -->    <template id="tmpl-settings-menu">
+        <div class="settings-overlay" role="dialog" aria-modal="true" aria-label="Settings">
+            <div class="settings-bg" aria-hidden="true"></div>
+
+            <!-- Header -->
+            <div class="settings-header" aria-hidden="true"></div>
+            <span class="settings-title">SETTINGS</span>
+
+            <!-- Row 1: Music + SFX -->
+            <button class="settings-btn settings-btn--music" id="settings-music-btn" type="button" aria-pressed="true">
+                <div class="settings-btn-icon settings-btn-icon--music"></div>
+                <span class="settings-btn-label">MUSIC</span>
+            </button>
+            <button class="settings-btn settings-btn--sfx" id="settings-sfx-btn" type="button" aria-pressed="true">
+                <div class="settings-btn-icon settings-btn-icon--sfx"></div>
+                <span class="settings-btn-label">SFX</span>
+            </button>
+
+            <!-- Row 2: Deeds + Stats -->
+            <button class="settings-btn settings-btn--deeds" id="settings-deeds-btn" type="button">
+                <div class="settings-btn-icon settings-btn-icon--deeds"></div>
+                <span class="settings-btn-label">DEEDS</span>
+            </button>
+            <button class="settings-btn settings-btn--stats" id="settings-stats-btn" type="button">
+                <div class="settings-btn-icon settings-btn-icon--stats"></div>
+                <span class="settings-btn-label">STATS</span>
+            </button>
+
+            <!-- Escape to Wilderness (reset) -->
+            <button class="settings-btn settings-btn--restart" id="settings-restart-btn" type="button">
+                <div class="settings-btn-icon settings-btn-icon--restart"></div>
+                <span class="settings-btn-label settings-btn-label--restart">ESCAPE TO<br>WILDERNESS</span>
+            </button>
+
+            <!-- Footer -->
+            <div class="settings-footer-bg" aria-hidden="true"></div>
+            <button class="settings-back-btn" type="button" aria-label="Back"></button>
+        </div>
+    </template>
+
+    <!-- ─── SHOP MENU TEMPLATE ─── -->
+    <template id="tmpl-shop-menu">
+        <div class="shop-screen" role="dialog" aria-modal="true" aria-label="Магазин">
+            <div class="shop-screen-bg" aria-hidden="true"></div>
+            <span class="shop-screen-title">SHOP</span>
+            <!-- Category tabs -->
+            <button class="shop-tab-btn shop-tab-btn--goods"    data-tab="goods"    type="button" aria-label="Товары"></button>
+            <button class="shop-tab-btn shop-tab-btn--property" data-tab="property" type="button" aria-label="Имущество"></button>
+            <button class="shop-tab-btn shop-tab-btn--clothes"  data-tab="clothes"  type="button" aria-label="Одежда"></button>
+            <!-- Top divider -->
+            <div class="shop-top-line" aria-hidden="true"></div>
+            <!-- Scrollable body -->
+            <div class="shop-body">
+                <div class="shop-body-bg" aria-hidden="true"></div>
+                <div class="shop-body-content"></div>
+            </div>
+            <!-- Footer -->
+            <div class="shop-screen-footer-bg" aria-hidden="true"></div>
+            <button class="shop-screen-back-btn" type="button" aria-label="Back"></button>
+        </div>
+    </template>
+
+    <!-- ─── DEEDS MENU TEMPLATE ─── -->
+    <template id="tmpl-deeds-menu">
+        <div class="deeds-screen" role="dialog" aria-modal="true" aria-label="Deeds">
+            <div class="deeds-screen-bg" aria-hidden="true"></div>
+            <div class="deeds-screen-header-icon" aria-hidden="true"></div>
+            <span class="deeds-screen-title">DEEDS</span>
+            <div class="deeds-screen-body">
+                <div class="deeds-screen-body-bg" aria-hidden="true"></div>
+                <div class="deeds-grid" id="deeds-grid-content"></div>
+            </div>
+            <div class="deeds-screen-footer-bg" aria-hidden="true"></div>
+            <button class="deeds-screen-back-btn" type="button" aria-label="Back"></button>
+        </div>
+    </template>
+
+    <!-- ─── STATS MENU TEMPLATE ─── -->
+    <template id="tmpl-stats-menu">
+        <div class="stats-screen" role="dialog" aria-modal="true" aria-label="Stats">
+            <div class="stats-screen-bg" aria-hidden="true"></div>
+            <div class="stats-screen-header-icon" aria-hidden="true"></div>
+            <span class="stats-screen-title">STATS</span>
+            <div class="stats-screen-body">
+                <div class="stats-screen-body-bg" aria-hidden="true"></div>
+                <div class="stats-rows" id="stats-rows-content"></div>
+            </div>
+            <div class="stats-screen-footer-bg" aria-hidden="true"></div>
+            <button class="stats-screen-back-btn" type="button" aria-label="Back"></button>
+        </div>
+    </template>
+
+    <!-- ─── UPGRADES / SKILL TREE MENU TEMPLATE ─── -->
+    <template id="tmpl-upgrades-menu">
+        <div class="upgrades-screen" role="dialog" aria-modal="true" aria-label="Upgrades">
+            <!-- Full-screen canvas: starfield + parallax BG layers -->
+            <canvas class="upgrades-starfield" data-upgrades-starfield aria-hidden="true"></canvas>
+
+            <!-- Viewport: receives pan/zoom via child transforms -->
+            <div class="upgrades-viewport" data-upgrades-viewport>
+                <!-- Edges canvas (lines between nodes) -->
+                <canvas class="upgrades-edges-canvas" data-upgrades-edges></canvas>
+                <!-- Node buttons layer -->
+                <div class="upgrades-nodes-layer" data-upgrades-nodes></div>
+            </div>
+
+            <!-- HUD: money / skill points / prestige / butts -->
+            <div class="upgrades-hud" data-upgrades-hud>
+                <div class="upgrades-hud-pill" data-upgrades-hud-money>
+                    <img src="UI/icons/icon-funds.png" alt="">
+                    <span>Деньги: <strong data-upgrades-hud-money-val>0 ₽</strong></span>
+                </div>
+                <div class="upgrades-hud-pill" data-upgrades-hud-sp>
+                    <img src="UI/icons/icon-counter-prestige.png" alt="">
+                    <span>SP: <strong data-upgrades-hud-sp-val>0</strong></span>
+                </div>
+                <div class="upgrades-hud-pill" data-upgrades-hud-prestige>
+                    <img src="UI/icons/icon-counter-prestige.png" alt="">
+                    <span>Престиж: <strong data-upgrades-hud-prestige-val>0</strong></span>
+                </div>
+                <div class="upgrades-hud-pill" data-upgrades-hud-butts>
+                    <img src="UI/icons/icon-counter-cig.png" alt="">
+                    <span>Бычки: <strong data-upgrades-hud-butts-val>0</strong></span>
+                </div>
+            </div>
+
+            <!-- First-open intro sequence (hidden by default) -->
+            <div class="upgr-intro-wrap" data-upg-intro hidden>
+                <div class="upgr-intro-blackout"></div>
+                <div class="upgr-intro-singularity" data-upg-singularity></div>
+                <div class="upgr-intro-shockwave" data-upg-shockwave></div>
+                <div class="upgr-intro-dialog" data-upg-dialog>
+                    <p class="upgr-intro-line" data-upg-line></p>
+                    <button class="upgr-intro-next-btn" data-upg-next type="button">▶</button>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <div class="upgrades-footer-bg" aria-hidden="true"></div>
+            <button class="upgrades-back-btn" type="button" aria-label="Back"></button>
+        </div>
+    </template>
+
+    <template id="tmpl-menu">
+        <div class="menu-shell" role="dialog" aria-modal="true">
+            <div class="menu-bg" aria-hidden="true"></div>
+            <div class="menu-header" role="banner">
+                <div class="ava-group">
+                    <div class="ava-bg"></div>
+                    <div class="ava-head"></div>
+                </div>
+                <div class="menu-title">BitTrick25</div>
+                <div class="info-zone">
+                    <div class="name-zone">
+                        <div class="name-plate"></div>
+                        <span class="name-text">Name: Current title</span>
+                    </div>
+                    <div class="lvl-zone">
+                        <div class="lvl-plate"></div>
+                        <span class="lvl-text">Lvl: 1</span>
+                    </div>
+                    <div class="menu-stat-zone">
+                        <div class="menu-stat-bg"></div>
+                        <span class="fame-text">Fame:</span>
+                        <div class="fame-stars"></div>
+                    </div>
+                </div>
+                <div class="menu-header-line" aria-hidden="true"></div>
+            </div>
+            <div class="menu-body" aria-live="polite"></div>
+            <div class="menu-footer" role="contentinfo" aria-hidden="false">
+                <button class="menu-footer-btn" type="button" aria-label="Back"></button>
+            </div>
+        </div>
+    </template>
+
+    <template id="tmpl-task-card">
+        <div class="task-card">
+            <div class="task-card-bg"></div>
+            <div class="task-job-icon"></div>
+            <span class="task-name">Task Name</span>
+            <div class="task-divider"></div>
+            <span class="task-job-desc">Job: Generate X</span>
+            <div class="task-payout">
+                <div class="pay-funds">
+                    <div class="pay-icon pay-icon--funds"></div>
+                    <span class="pay-value">1000</span>
+                </div>
+                <div class="pay-xp">
+                    <div class="pay-icon pay-icon--xp"></div>
+                    <span class="pay-value">50</span>
+                </div>
+                <div class="pay-prestige">
+                    <div class="pay-icon pay-icon--prestige"></div>
+                    <span class="pay-value">50</span>
+                </div>
+            </div>
+            <div class="task-timer">
+                <div class="task-timer-bg"></div>
+                <div class="task-timer-icon"></div>
+                <span class="task-timer-value">00:25</span>
+            </div>
+            <button class="task-start-btn" type="button" aria-label="Start task"></button>
+        </div>
+    </template>
+
+    <template id="tmpl-task-card-story">
+        <div class="task-card task-card--story">
+            <div class="task-card-bg"></div>
+            <div class="task-job-icon"></div>
+            <span class="task-name">Task Name</span>
+            <div class="task-divider"></div>
+            <span class="task-job-desc">Job: Generate X</span>
+            <div class="task-payout">
+                <div class="pay-funds">
+                    <div class="pay-icon pay-icon--funds"></div>
+                    <span class="pay-value">1000</span>
+                </div>
+                <div class="pay-xp">
+                    <div class="pay-icon pay-icon--xp"></div>
+                    <span class="pay-value">50</span>
+                </div>
+                <div class="pay-prestige">
+                    <div class="pay-icon pay-icon--prestige"></div>
+                    <span class="pay-value">50</span>
+                </div>
+            </div>
+            <button class="task-start-btn" type="button" aria-label="Start task"></button>
+            <span class="task-card-desc">Job description is here or some comments</span>
+        </div>
+    </template>
+
+    <template id="tmpl-task-card-research">
+        <div class="task-card task-card--research">
+            <div class="task-card-bg"></div>
+            <div class="task-job-icon"></div>
+            <span class="task-name">Research Name</span>
+            <span class="task-stage">1/5</span>
+            <div class="task-divider"></div>
+            <span class="task-job-desc">Job: Research X</span>
+            <span class="task-price">Price: XXX</span>
+            <button class="task-start-btn" type="button" aria-label="Start research"></button>
+            <span class="task-card-desc">Unlocks or description here</span>
+        </div>
+    </template>
+
+    <template id="tmpl-task-card-promo">
+        <div class="task-card task-card--promo">
+            <div class="task-card-bg"></div>
+            <div class="task-job-icon"></div>
+            <span class="task-name">Promo Name</span>
+            <button class="task-repeatable" type="button" data-active="false" aria-label="Toggle repeat"></button>
+            <div class="task-divider"></div>
+            <span class="task-job-desc">Job: Post X</span>
+            <div class="task-payout">
+                <div class="pay-funds">
+                    <div class="pay-icon pay-icon--promo-pool"></div>
+                    <span class="pay-value">50</span>
+                </div>
+                <div class="pay-prestige">
+                    <div class="pay-icon pay-icon--promo-prestige"></div>
+                    <span class="pay-value">50</span>
+                </div>
+            </div>
+            <button class="task-start-btn" type="button" aria-label="Start promo"></button>
+            <span class="task-card-desc">Description here</span>
+        </div>
+    </template>
+
+    <template id="tmpl-task-card-contract">
+        <div class="task-card task-card--contract">
+            <div class="task-card-bg"></div>
+            <div class="task-job-icon"></div>
+            <span class="task-name">Contract Name</span>
+            <span class="task-contractor">Studio Name</span>
+            <button class="task-repeatable" type="button" data-active="false" aria-label="Toggle repeat"></button>
+            <div class="task-divider"></div>
+            <span class="task-job-desc">Job: Work × 3</span>
+            <div class="task-payout">
+                <div class="pay-funds">
+                    <div class="pay-icon pay-icon--funds"></div>
+                    <span class="pay-value">150 ₽</span>
+                </div>
+            </div>
+            <button class="task-start-btn" type="button" aria-label="Start contract"></button>
+        </div>
+    </template>
+
+    <!-- Data globals MUST load before ES module -->
+    <script src="src/break_infinity.js"></script>
+    <script src="localization.js"></script>
+    <script src="orders-data.js"></script>
+    <script src="tutorial-data.js"></script>
+    <script src="achievements-data.js"></script>
+    <script src="src/upgrades-data.js"></script>
+
+    <script type="module" src="src/game.js"></script>
+</body>
+</html>

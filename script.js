@@ -1162,6 +1162,34 @@ const Game = {
                 return;
             }
         },
+
+        // Speech audio played during dialog typing
+        _speechAudio: null,
+
+        playSpeech(speaker) {
+            this.stopSpeech();
+            if (!Game.state.audio.sfxEnabled) return;
+            const map = {
+                chatdjbt: 'sounds/sfx/speech/ChatDJBT.mp3',
+                gg:       'sounds/sfx/speech/mc-1.mp3',
+            };
+            const src = map[speaker];
+            if (!src) return;
+            try {
+                const a = new Audio(src);
+                a.volume = 0.45;
+                a.loop = true;
+                this._speechAudio = a;
+                a.play().catch(() => {});
+            } catch (_) { /* ignore */ }
+        },
+
+        stopSpeech() {
+            if (this._speechAudio) {
+                try { this._speechAudio.pause(); } catch (_) { /* */ }
+                this._speechAudio = null;
+            }
+        },
     },
 
     ui: {
@@ -3539,6 +3567,7 @@ const Game = {
             Game.actions.pauseGameLogic();
             Game.state.dialogActive = true;
             this.clearSpotlight();
+            Game.audio.playSpeech('gg');
 
             if (Game.elems.thoughtBox) {
                 Game.elems.thoughtBox.classList.add('visible');
@@ -3555,6 +3584,7 @@ const Game = {
                 return;
             }
             if (!Game.state.dialogActive) return;
+            Game.audio.stopSpeech();
             if (Game.elems.thoughtBox) {
                 Game.elems.thoughtBox.classList.remove('visible');
             }
@@ -3566,6 +3596,7 @@ const Game = {
         openDialog(speaker, text, fxToken, spotlightSelector) {
             Game.actions.pauseGameLogic();
             Game.state.dialogActive = true;
+            Game.audio.playSpeech(speaker);
 
             const isChat = speaker === 'chatdjbt';
             if (Game.elems.vnDialog) {
@@ -3596,6 +3627,7 @@ const Game = {
                 return;
             }
             if (!Game.state.dialogActive) return;
+            Game.audio.stopSpeech();
             if (Game.elems.vnDialog) {
                 Game.elems.vnDialog.classList.remove('visible');
             }
@@ -3649,6 +3681,7 @@ const Game = {
             this.pointer = 0;
             this.doneCallback = null;
             this.clearSpotlight();
+            Game.audio.stopSpeech();
 
             this.clearTypingTimer();
             if (this.typing.targetElement) {
@@ -3750,6 +3783,7 @@ const Game = {
             if (!this.typing.targetElement) return;
 
             this.clearTypingTimer();
+            Game.audio.stopSpeech();
             if (this.typing.allowHtml) {
                 this.typing.targetElement.innerHTML = this.typing.htmlText;
             } else {
@@ -3782,6 +3816,13 @@ const Game = {
                 return;
             }
 
+            // Remove pulse from any previously highlighted element
+            if (this._spotlightTarget && this._spotlightTarget !== target) {
+                this._spotlightTarget.classList.remove('tutorial-spotlight-target');
+            }
+            this._spotlightTarget = target;
+            target.classList.add('tutorial-spotlight-target');
+
             const targetRect = target.getBoundingClientRect();
             const overlayRect = overlay.getBoundingClientRect();
             const pad = 8;
@@ -3795,6 +3836,10 @@ const Game = {
         },
 
         clearSpotlight() {
+            if (this._spotlightTarget) {
+                this._spotlightTarget.classList.remove('tutorial-spotlight-target');
+                this._spotlightTarget = null;
+            }
             if (Game.elems.spotlightRing) {
                 Game.elems.spotlightRing.classList.remove('visible');
             }
@@ -5096,6 +5141,9 @@ const Game = {
 
         trySpawnOrderByChance() {
             if (this.isLogicPaused()) return;
+            // Do not spawn regular orders until the tutorial is done and post_portfolio story is completed
+            if (!Game.state.introCompleted) return;
+            if (!this.hasCompletedStory('post_portfolio')) return;
             if (Math.random() >= this.getEffectiveJobChance()) return;
             this.spawnOneOrder();
         },
@@ -6180,7 +6228,10 @@ const Game = {
             }
 
             if (Game.elems.fundsBtn) {
-                Game.elems.fundsBtn.addEventListener('click', () => Game.ui.openOverlay(Game.elems.shopMenu));
+                Game.elems.fundsBtn.addEventListener('click', () => {
+                    if (!Game.state.chapter1Completed) return; // Shop locked until Chapter 1 is done
+                    Game.ui.openOverlay(Game.elems.shopMenu);
+                });
             }
 
             if (Game.elems.menuBtn) {

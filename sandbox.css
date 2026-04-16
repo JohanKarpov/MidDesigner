@@ -1,0 +1,1493 @@
+/* ============================================================
+   SANDBOX — Main Screen v2
+   All values: calc(var(--r) * N)  where N = Figma px value
+   Canvas: 1080 × 1920
+   ============================================================ */
+
+:root {
+    --cw: min(100vw, calc(100dvh * 9 / 16));
+    --ch: calc(var(--cw) * 16 / 9);
+    --r: calc(var(--cw) / 1080);
+    --col-bg: #242424;
+    --col-counter-bg: rgba(0,0,0,0.42);
+    --col-toggle-off: #E52C2F;
+    --col-toggle-on: #27F715;
+}
+
+/* ── Reset ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+button { font: inherit; cursor: pointer; border: none; background: transparent; padding: 0; }
+img { display: block; }
+
+/* ── Base ── */
+body {
+    width: 100vw;
+    height: 100dvh;
+    overflow: hidden;
+    background: #111;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Tiny5', monospace;
+}
+
+.game-frame {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.game-container {
+    position: relative;
+    width: var(--cw);
+    height: var(--ch);
+    background: var(--col-bg);
+    overflow: hidden;
+    background-image: url("bg/bg_1.png");
+    background-size: cover;
+    background-position: center;
+}
+
+/* ─── Property background overlay layers ─── */
+.bg-layer {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    pointer-events: none;
+    z-index: 1;
+}
+.bg-layer[hidden] { display: none; }
+
+/* Overlay for in-page menus */
+.menu-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.55);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 120;
+}
+.menu-overlay-inner {
+    position: absolute;
+    /* fill the existing game container so overlay scales with it */
+    left: 0; top: 0; right: 0; bottom: 0;
+    width: 100%; height: 100%;
+}
+
+/* Orders overlay styles removed from sandbox build */
+
+/* .menu-overlay-canvas removed (unused Orders remnant) */
+
+/* ============================================================
+   FOOTER GRADIENT  —  Figma: top 1460, height 460
+   ============================================================ */
+.ftr-gradient {
+    position: absolute;
+    left: 0;
+    top: calc(var(--r) * 1460);
+    width: 100%;
+    height: calc(var(--r) * 460);
+    background: linear-gradient(180deg, rgba(0,0,0,0) 20.53%, #000000 110.11%);
+    pointer-events: none;
+    z-index: 4;
+}
+
+/* ============================================================
+   HEADER BACKGROUND  —  Figma: top 0, height 230
+   ============================================================ */
+.hdr {
+    position: absolute;
+    left: 0; top: 0;
+    width: 100%;
+    height: calc(var(--r) * 230);
+    background: rgba(217,217,217,0.15);
+    z-index: 10;
+    pointer-events: none;
+}
+
+/* ============================================================
+   MONEY COUNTER  —  Figma: left 21, top 52, width 505, height 85
+   ============================================================ */
+.money-counter {
+    position: absolute;
+    left: calc(var(--r) * 21);
+    top: calc(var(--r) * 52);
+    width: calc(var(--r) * 505);
+    height: calc(var(--r) * 85);
+    background: var(--col-counter-bg);
+    border-radius: calc(var(--r) * 20);
+    z-index: 11;
+}
+
+/* icon: canvas left 36 → relative 15px; canvas top 63 → relative 11px */
+.money-counter .cnt-icon {
+    position: absolute;
+    left: calc(var(--r) * 15);
+    top: calc(var(--r) * 11);
+    width: calc(var(--r) * 64);
+    height: calc(var(--r) * 64);
+    object-fit: contain;
+    filter: drop-shadow(0 4px calc(var(--r)*5.7) rgba(0,0,0,0.49));
+}
+
+/* frame: canvas left 100 → relative 79px; width 426 */
+.money-counter .cnt-frame {
+    position: absolute;
+    left: calc(var(--r) * 79);
+    top: 0;
+    width: calc(var(--r) * 426);
+    height: 100%;
+    object-fit: fill;
+}
+
+/* value: canvas left 121 → relative 100px; width 384 */
+.money-counter .cnt-value {
+    position: absolute;
+    left: calc(var(--r) * 100);
+    top: calc(var(--r) * 11);
+    width: calc(var(--r) * 384);
+    height: calc(var(--r) * 64);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: calc(var(--r) * 56);
+}
+
+/* ============================================================
+   PRESTIGE COUNTER  —  Figma: left 552, top 52, width 240, height 85
+   ============================================================ */
+.prestige-counter {
+    position: absolute;
+    left: calc(var(--r) * 552);
+    top: calc(var(--r) * 52);
+    width: calc(var(--r) * 240);
+    height: calc(var(--r) * 85);
+    background: var(--col-counter-bg);
+    border-radius: calc(var(--r) * 20);
+    z-index: 11;
+}
+
+/* icon: canvas left 567 → relative 15px */
+.prestige-counter .cnt-icon {
+    position: absolute;
+    left: calc(var(--r) * 15);
+    top: calc(var(--r) * 11);
+    width: calc(var(--r) * 64);
+    height: calc(var(--r) * 64);
+    object-fit: contain;
+}
+
+/* frame: canvas left 631 → relative 79px; width 161 */
+.prestige-counter .cnt-frame {
+    position: absolute;
+    left: calc(var(--r) * 79);
+    top: 0;
+    width: calc(var(--r) * 161);
+    height: 100%;
+    object-fit: fill;
+}
+
+/* value: canvas left 651 → relative 99px; width 123 */
+.prestige-counter .cnt-value {
+    position: absolute;
+    left: calc(var(--r) * 99);
+    top: calc(var(--r) * 11);
+    width: calc(var(--r) * 123);
+    height: calc(var(--r) * 64);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: calc(var(--r) * 56);
+}
+
+/* ============================================================
+   CIG COUNTER  —  Figma: left 817, top 52, width 240, height 85
+   ============================================================ */
+.cig-counter {
+    position: absolute;
+    left: calc(var(--r) * 817);
+    top: calc(var(--r) * 52);
+    width: calc(var(--r) * 240);
+    height: calc(var(--r) * 85);
+    background: var(--col-counter-bg);
+    border-radius: calc(var(--r) * 20);
+    z-index: 11;
+}
+
+/* icon: canvas left 833 → relative 16px */
+.cig-counter .cnt-icon {
+    position: absolute;
+    left: calc(var(--r) * 16);
+    top: calc(var(--r) * 11);
+    width: calc(var(--r) * 64);
+    height: calc(var(--r) * 64);
+    object-fit: contain;
+}
+
+/* frame: canvas left 896 → relative 79px; width 161 */
+.cig-counter .cnt-frame {
+    position: absolute;
+    left: calc(var(--r) * 79);
+    top: 0;
+    width: calc(var(--r) * 161);
+    height: 100%;
+    object-fit: fill;
+}
+
+/* value: canvas left 915 → relative 98px; width 123 */
+.cig-counter .cnt-value {
+    position: absolute;
+    left: calc(var(--r) * 98);
+    top: calc(var(--r) * 11);
+    width: calc(var(--r) * 123);
+    height: calc(var(--r) * 64);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: calc(var(--r) * 56);
+}
+
+/* ============================================================
+   XP BAR  —  Figma: left 21, top 157, width 771, height 50
+   ============================================================ */
+.xp-bar {
+    position: absolute;
+    left: calc(var(--r) * 21);
+    top: calc(var(--r) * 157);
+    width: calc(var(--r) * 771);
+    height: calc(var(--r) * 50);
+    background: rgba(0,0,0,0.40);
+    border-radius: calc(var(--r) * 20);
+    overflow: hidden;
+    z-index: 11;
+}
+
+.xp-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #3ddc00, #62ff00);
+    transition: width 0.4s ease;
+}
+
+.xp-text {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: calc(var(--r) * 36);
+}
+
+/* ============================================================
+   LVL BADGE  —  Figma: left 817, top 157, width 240, height 50
+   ============================================================ */
+.lvl-badge {
+    position: absolute;
+    left: calc(var(--r) * 817);
+    top: calc(var(--r) * 157);
+    width: calc(var(--r) * 240);
+    height: calc(var(--r) * 50);
+    background: rgba(98,255,0,0.25);
+    border: calc(var(--r) * 3) solid #62FF00;
+    border-radius: calc(var(--r) * 20);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: calc(var(--r) * 42);
+    z-index: 11;
+}
+
+/* ============================================================
+   FIXED RIGHT MENU
+   Figma: left 914, tops 271 / 426 / 581, width 149, height 120
+   ============================================================ */
+.fmenu-btn {
+    position: absolute;
+    left: calc(var(--r) * 914);
+    width: calc(var(--r) * 149);
+    height: calc(var(--r) * 120);
+    background: rgba(0,0,0,0.15);
+    border-radius: calc(var(--r) * 20);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 15;
+    isolation: isolate;
+    transition: transform 0.12s ease, filter 0.12s ease;
+}
+
+.fmenu-btn:active { transform: scale(0.93); }
+
+.fmenu-btn > img:not(.sbtn-lock-icon):not(.ach-badge) {
+    position: relative;
+    z-index: 1;
+    width: calc(var(--r) * 120);
+    height: calc(var(--r) * 120);
+    object-fit: contain;
+    filter: drop-shadow(0 4px 12px rgba(0,0,0,0.75));
+}
+
+.fmenu-btn--menu     { top: calc(var(--r) * 271); }
+.fmenu-btn--shop     { top: calc(var(--r) * 426); }
+.fmenu-btn--upgrades { top: calc(var(--r) * 581); }
+
+/* ============================================================
+   SIDEBARS
+   Canvas: width 489, height 590, top 743
+   Right sidebar: right:0, layout-left=591
+     icons    → translateX(+284) → visible left edge at 875px
+     expanded → translateX(0)    → full width from 591px
+     hidden   → translateX(457px) → off screen
+   Left sidebar: left:0, layout-left=0
+     icons    → translateX(-283) → visible right edge at 206px
+     expanded → translateX(0)    → full width from 0px
+     hidden   → translateX(-457px) → off screen
+   ============================================================ */
+.sidebar {
+    position: absolute;
+    top: calc(var(--r) * 743);
+    width: calc(var(--r) * 489);
+    height: calc(var(--r) * 590);
+    transition: transform 0.25s ease;
+    z-index: 12;
+}
+
+.sidebar--right { right: 0; }
+.sidebar--left  { left: 0; }
+
+.sidebar--right[data-state="icons"]    { transform: translateX(calc(var(--r) *  284)); }
+.sidebar--right[data-state="expanded"] { transform: translateX(calc(var(--r) * 109)); }
+.sidebar--right[data-state="hidden"]   { transform: translateX(calc(var(--r) * 414)); }
+
+.sidebar--left[data-state="icons"]    { transform: translateX(calc(var(--r) * -283)); }
+.sidebar--left[data-state="expanded"] { transform: translateX(calc(var(--r) * -109)); }
+.sidebar--left[data-state="hidden"]   { transform: translateX(calc(var(--r) * -414)); }
+
+/* ── Sidebar PNG background + click target ── */
+.sidebar-bg {
+    position: absolute;
+    inset: 0;
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    cursor: pointer;
+    z-index: 1;
+}
+
+.sidebar--right .sidebar-bg { background-image: url(UI/right-side-bar.png); }
+.sidebar--left  .sidebar-bg { background-image: url(UI/left-side-bar.png); }
+
+/* ── Sidebar icon buttons ── */
+/* Center buttons horizontally inside sidebar (489px wide) -> (489 - 120)/2 = 184.5 */
+.sidebar--right .sbtn { left: calc(var(--r) * 77.89); }
+.sidebar--left .sbtn  { left: calc(var(--r) * 291.11); }
+
+/* Even vertical distribution inside sidebar (height 590) with 4 buttons 120px tall
+    gap = (590 - 4*120) / 5 = 22 -> positions: 22, 164, 306, 448 */
+.sbtn.sbtn--0 { top: calc(var(--r) * 22);  }
+.sbtn.sbtn--1 { top: calc(var(--r) * 164); }
+.sbtn.sbtn--2 { top: calc(var(--r) * 306); }
+.sbtn.sbtn--3 { top: calc(var(--r) * 448); }
+
+.sbtn {
+    position: absolute;
+    /* target size: 120x120 as requested (scaled by --r) */
+    width: calc(var(--r) * 120);
+    height: calc(var(--r) * 120);
+    border-radius: calc(var(--r) * 20);
+    overflow: hidden;
+    isolation: isolate;
+    z-index: 2;
+    transition: filter 0.12s, transform 0.12s;
+}
+
+.sbtn:active { filter: brightness(1.25); }
+
+.sbtn-frame {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: fill;
+    border-radius: calc(var(--r) * 20);
+    z-index: 1;
+}
+.sbtn-icon {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    /* inner padding tuned for 120px size */
+    padding: calc(var(--r) * 6);
+    z-index: 2;
+}
+
+.fmenu-btn::after,
+.sbtn::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: calc(var(--r) * 82);
+    height: calc(var(--r) * 82);
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255, 232, 116, 0.95) 0%, rgba(255, 178, 43, 0.58) 45%, rgba(255, 178, 43, 0) 76%);
+    filter: blur(calc(var(--r) * 12));
+    opacity: 0;
+    pointer-events: none;
+    transform: translate(-50%, -50%) scale(0.78);
+    z-index: 0;
+}
+
+.fmenu-btn.menu-btn-attention,
+.sbtn.menu-btn-attention {
+    animation: menu-btn-attention-pulse 1.05s ease-in-out infinite;
+}
+
+.fmenu-btn.menu-btn-attention::after,
+.sbtn.menu-btn-attention::after {
+    opacity: 1;
+    animation: menu-btn-attention-glow 1.05s ease-in-out infinite;
+}
+
+.fmenu-btn.menu-btn-attention img,
+.sbtn.menu-btn-attention .sbtn-icon {
+    filter: drop-shadow(0 0 calc(var(--r) * 18) rgba(255, 214, 74, 0.95)) drop-shadow(0 4px 12px rgba(0,0,0,0.75));
+}
+
+@keyframes menu-btn-attention-pulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.08);
+    }
+}
+
+@keyframes menu-btn-attention-glow {
+    0%, 100% {
+        opacity: 0.48;
+        transform: translate(-50%, -50%) scale(0.78);
+    }
+    50% {
+        opacity: 0.92;
+        transform: translate(-50%, -50%) scale(1.16);
+    }
+}
+
+/* ============================================================
+   BARS
+   Figma: left 169, width 738, height 62.5
+   Heat: top 1400  ·  Stress: top 1485
+   ============================================================ */
+.bar {
+    position: absolute;
+    left: calc(var(--r) * 169);
+    width: calc(var(--r) * 738);
+    height: calc(var(--r) * 62.5);
+    border-radius: calc(var(--r) * 60);
+    overflow: hidden;
+    border: calc(var(--r) * 5) solid rgba(0,0,0,0.25);
+    background: rgba(0,0,0,0.35);
+    z-index: 6;
+}
+
+.bar--heat   { top: calc(var(--r) * 1400); }
+.bar--stress { top: calc(var(--r) * 1485); }
+
+.bar-fill {
+    height: 100%;
+    transition: width 0.4s ease;
+}
+/* Stress bar uses JS lerp — no CSS transition needed */
+.bar--stress .bar-fill { transition: none; }
+
+/* Figma gradient + rotate(-180deg) is equivalent to reversing gradient direction */
+.bar--heat .bar-fill,
+.bar--stress .bar-fill { background: linear-gradient(270deg, #FF0000 0%, rgba(255,51,0,0.53) 100%); }
+
+.bar-label {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: calc(var(--r) * 38);
+    pointer-events: none;
+}
+
+/* ============================================================
+   TOGGLE BUTTONS
+   Figma: width 102, height 96, top 1615
+   Agent: left 63  ·  Autogen: left 916
+   ============================================================ */
+.toggle-btn {
+    position: absolute;
+    top: calc(var(--r) * 1615);
+    width: calc(var(--r) * 102);
+    height: calc(var(--r) * 96);
+    background: var(--col-toggle-off);
+    border-radius: calc(var(--r) * 20);
+    font-size: calc(var(--r) * 48);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 7;
+    transition: background 0.2s, transform 0.1s;
+}
+
+.toggle-btn[data-active="true"] { background: var(--col-toggle-on); }
+.toggle-btn:active { transform: scale(0.93); }
+
+#agent-toggle   { left: calc(var(--r) * 63); }
+#autogen-toggle { left: calc(var(--r) * 916); }
+#autogen-toggle[hidden] { display: none; }
+
+/* ============================================================
+   GENERATE BUTTON  —  Figma: left 206, top 1585, width 669, height 173
+   ============================================================ */
+.gen-btn {
+    position: absolute;
+    left: calc(var(--r) * 206);
+    top: calc(var(--r) * 1585);
+    width: calc(var(--r) * 669);
+    height: calc(var(--r) * 173);
+    z-index: 7;
+    isolation: isolate;
+    transition: transform 0.08s ease;
+}
+
+.gen-btn:active { transform: scale(0.97); }
+
+.gen-btn img {
+    width: 100%;
+    height: 100%;
+    object-fit: fill;
+}
+
+/* ============================================================
+   GEN RATE TEXT  —  Figma: left 425, top 1758, width 226
+   ============================================================ */
+.gen-rate {
+    position: absolute;
+    left: calc(var(--r) * 425);
+    top: calc(var(--r) * 1758);
+    width: calc(var(--r) * 226);
+    height: calc(var(--r) * 40);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: calc(var(--r) * 42);
+    z-index: 6;
+    pointer-events: none;
+}
+
+/* ============================================================
+   TASK NAME TEXT  —  Figma: left 358, top 1831, width 360
+   ============================================================ */
+.task-name {
+    position: absolute;
+    left: calc(var(--r) * 358);
+    top: calc(var(--r) * 1831);
+    width: calc(var(--r) * 360);
+    height: calc(var(--r) * 40);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: calc(var(--r) * 42);
+    z-index: 6;
+    pointer-events: none;
+}
+
+/* ============================================================
+   TASK TIMER BAR  —  Figma: left 0, top 1889, width 1080, height 67
+   ============================================================ */
+.task-timer {
+    position: absolute;
+    left: 0;
+    top: calc(var(--r) * 1889);
+    width: 100%;
+    height: calc(var(--r) * 67);
+    border-radius: calc(var(--r) * 20);
+    overflow: hidden;
+    z-index: 8;
+}
+
+.task-timer-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #00FFB7 0%, #62FF00 100%);
+    transition: width 0.4s ease;
+}
+
+/* Repeat / stop button — sits over the task timer bar */
+.task-repeat-btn {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: calc(var(--r) * 1789);
+    height: calc(var(--r) * 67);
+    padding: 0 calc(var(--r) * 48);
+    border-radius: calc(var(--r) * 34);
+    border: calc(var(--r) * 2) solid rgba(80, 200, 120, 0.7);
+    background: rgba(30, 90, 55, 0.88);
+    color: #a8f0c0;
+    font-family: 'Tiny5', monospace;
+    font-size: calc(var(--r) * 28);
+    cursor: pointer;
+    z-index: 9;
+    white-space: nowrap;
+}
+.task-repeat-btn[data-mode="stop"] {
+    border-color: rgba(220, 60, 60, 0.8);
+    background: rgba(110, 25, 25, 0.88);
+    color: #ffaaaa;
+}
+
+/* ============================================================
+   CONTRACT CARD  (task-card--contract)
+   Inherits base task-card structure; replaces timer with repeatable toggle
+   ============================================================ */
+.task-card--contract {
+    /* same base as promo */
+}
+
+/* Contractor studio name — top-left below task name */
+.task-card--contract .task-contractor {
+    position: absolute;
+    left:   calc(var(--r) * 156);
+    top:    calc(var(--r) * 80);
+    width:  calc(var(--r) * 560);
+    height: calc(var(--r) * 42);
+    font-family: 'Tiny5';
+    font-size: calc(var(--r) * 36);
+    color: rgba(255,255,255,0.55);
+    z-index: 1;
+    pointer-events: none;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Repeatable toggle — same position as promo */
+.task-card--contract .task-repeatable {
+    position: absolute;
+    left:   calc(var(--r) * 924);
+    top:    calc(var(--r) * 40);
+    width:  calc(var(--r) * 64);
+    height: calc(var(--r) * 64);
+    background-image: url(UI/task-frame/repeatable-off.png);
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    z-index: 2;
+    transition: transform 0.08s ease;
+}
+.task-card--contract .task-repeatable[data-active="true"] {
+    background-image: url(UI/task-frame/repeatable-on.png);
+}
+.task-card--contract .task-repeatable:active { transform: scale(0.9); }
+
+/* Payout — only funds slot */
+.task-card--contract .pay-funds .pay-value {
+    width: calc(var(--r) * 200);
+}
+
+/* ============================================================
+   ORDERS TAB BAR  (Фриланс / Контракты switcher)
+   ============================================================ */
+.orders-tab-bar {
+    display: flex;
+    gap: calc(var(--r) * 10);
+    padding: calc(var(--r) * 10) calc(var(--r) * 18);
+    background: rgba(6, 10, 24, 0.65);
+    backdrop-filter: blur(8px);
+    border-radius: 0 0 calc(var(--r) * 26) calc(var(--r) * 26);
+    border-top: calc(var(--r) * 1) solid rgba(255,255,255,0.07);
+}
+.orders-tab-btn {
+    flex: 1;
+    height: calc(var(--r) * 78);
+    border-radius: calc(var(--r) * 18);
+    border: calc(var(--r) * 2) solid rgba(160, 185, 255, 0.13);
+    background: rgba(255,255,255,0.04);
+    color: rgba(185,205,255,0.42);
+    font-family: 'Tiny5', monospace;
+    font-size: calc(var(--r) * 34);
+    letter-spacing: 0.04em;
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.orders-tab-btn:hover:not(:disabled) {
+    background: rgba(70, 110, 220, 0.12);
+    border-color: rgba(120, 160, 255, 0.35);
+    color: rgba(195,215,255,0.72);
+}
+.orders-tab-btn--active {
+    background: linear-gradient(155deg, rgba(55, 115, 255, 0.38) 0%, rgba(70, 75, 200, 0.26) 100%);
+    border-color: rgba(135, 175, 255, 0.65);
+    color: #cce0ff;
+    box-shadow: 0 0 calc(var(--r) * 22) rgba(75, 135, 255, 0.22);
+}
+.orders-tab-btn--locked {
+    opacity: 0.32;
+    cursor: default;
+}
+
+/* Tab bar: sits directly below the menu header */
+.menu-shell[data-menu="orders"] > .orders-tab-bar {
+    position: absolute;
+    top:   calc(var(--r) * 348);
+    left:  calc(var(--r) * 35);
+    width: calc(var(--r) * 1010);
+    margin: 0;
+    z-index: 3;
+}
+
+/* Body pushed down to make room for the tab bar */
+.menu-shell[data-menu="orders"] .menu-body {
+    top:    calc(var(--r) * 450);
+    height: calc(var(--r) * 1287);
+}
+
+/* Orders styles removed from sandbox build */
+
+/* ============================================================
+   GENERIC MENU SHELL (used by tmpl-menu)
+   Scales with --r so all inner coordinates can use Figma values.
+   ============================================================ */
+.menu-shell {
+    position: absolute;
+    left: 0; top: 0;
+    width: calc(var(--r) * 1080);
+    height: calc(var(--r) * 1920);
+    pointer-events: auto;
+}
+
+.menu-shell .menu-bg {
+    position: absolute;
+    left: 0; top: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url(UI/task-menu/menu-base-bg.png);
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    background-position: center;
+    z-index: 1;
+}
+
+/* Per-menu background overrides (one image per menu) */
+.menu-shell[data-menu="story"] .menu-bg {
+    background-image: url(UI/task-menu/menu-story-bg.png);
+}
+.menu-shell[data-menu="research"] .menu-bg {
+    background-image: url(UI/task-menu/menu-research-bg.png);
+}
+.menu-shell[data-menu="promo"] .menu-bg {
+    background-image: url(UI/task-menu/menu-promo-bg.png);
+}
+
+.menu-shell .menu-body {
+    position: absolute;
+    /* Figma: orders-body — left 35, top 338, width 1012, height 1399 */
+    left:   calc(var(--r) * 35);
+    top:    calc(var(--r) * 348);
+    width:  calc(var(--r) * 1012);
+    height: calc(var(--r) * 1389);
+    z-index: 2;
+    overflow-y: auto;
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+    gap: calc(var(--r) * 18);
+    padding-top: calc(var(--r) * 30);
+}
+
+/* ============================================================
+   MENU HEADER  —  Figma artboard: 1080 × 343
+   All child coords are converted from artboard-absolute to
+   parent-relative: left_rel = left_abs − parent_left_abs
+   ============================================================ */
+.menu-shell .menu-header {
+    position: absolute;
+    left: 0; top: 0;
+    width: calc(var(--r) * 1080);
+    height: calc(var(--r) * 343);
+    z-index: 2;
+    pointer-events: auto;
+    overflow: visible; /* allow separator line to extend below boundary */
+}
+
+/* ── Avatar group ─────────────────────────────────────── */
+/* artboard: left 39, top 5 */
+.menu-shell .menu-header .ava-group {
+    position: absolute;
+    left: calc(var(--r) * 39);
+    top:  calc(var(--r) * 5);
+    width:  calc(var(--r) * 322);
+    height: calc(var(--r) * 312);
+}
+
+/* artboard: left 39, top 36 → relative to ava-group: left 0, top 31 */
+.menu-shell .menu-header .ava-bg {
+    position: absolute;
+    left: 0;
+    top:  calc(var(--r) * 31);
+    width:  calc(var(--r) * 281);
+    height: calc(var(--r) * 281);
+    background-image: url(UI/task-menu/ava-bg-blue.png);
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    z-index: 1;
+}
+
+/* artboard: left 39, top 5 → relative to ava-group: left 0, top 0 */
+.menu-shell .menu-header .ava-head {
+    position: absolute;
+    left: 0;
+    top:  0;
+    width:  calc(var(--r) * 322);
+    height: calc(var(--r) * 299);
+    background-image: url(UI/task-menu/ava-head-hw1.png);
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    z-index: 2;
+}
+
+/* ── Title (player name / BitTrick25) ─────────────────── */
+.menu-shell .menu-header .menu-title {
+    position: absolute;
+    left: calc(var(--r) * 375);
+    top:  calc(var(--r) * 36);
+    width:  calc(var(--r) * 520);
+    height: calc(var(--r) * 90);
+    font-family: 'Tiny5';
+    font-weight: 400;
+    font-size: calc(var(--r) * 96);
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    color: #2E2519;
+    z-index: 3;
+}
+
+/* ── Info zone (name + lvl + stats) ───────────────────── */
+/* artboard: left 375, top 141 */
+.menu-shell .menu-header .info-zone {
+    position: absolute;
+    left: calc(var(--r) * 375);
+    top:  calc(var(--r) * 141);
+    width:  calc(var(--r) * 615);
+    height: calc(var(--r) * 166);
+}
+
+/* Name zone — relative to info-zone: left 0, top 0 */
+.menu-shell .menu-header .name-zone {
+    position: absolute;
+    left: 0;
+    top:  0;
+    width:  calc(var(--r) * 615);
+    height: calc(var(--r) * 75);
+}
+.menu-shell .menu-header .name-plate {
+    position: absolute;
+    inset: 0;
+    background: #46C1FF;
+    border-radius: calc(var(--r) * 15);
+}
+/* artboard: left 403, top 155 → rel to name-zone (375,141): left 28, top 14 */
+.menu-shell .menu-header .name-text {
+    position: absolute;
+    left: calc(var(--r) * 28);
+    top:  calc(var(--r) * 14);
+    width:  calc(var(--r) * 551);
+    height: calc(var(--r) * 48);
+    font-family: 'Tiny5';
+    font-weight: 400;
+    font-size: calc(var(--r) * 48);
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    color: #FFFFFF;
+    z-index: 1;
+}
+
+/* Lvl zone — relative to info-zone: left 0, top 91 (232−141) */
+.menu-shell .menu-header .lvl-zone {
+    position: absolute;
+    left: 0;
+    top:  calc(var(--r) * 91);
+    width:  calc(var(--r) * 164);
+    height: calc(var(--r) * 75);
+}
+.menu-shell .menu-header .lvl-plate {
+    position: absolute;
+    inset: 0;
+    background: #46C1FF;
+    border-radius: calc(var(--r) * 15);
+}
+/* artboard: left 403, top 246 → rel to lvl-zone (375,232): left 28, top 14 */
+.menu-shell .menu-header .lvl-text {
+    position: absolute;
+    left: calc(var(--r) * 28);
+    top:  calc(var(--r) * 14);
+    width:  calc(var(--r) * 108);
+    height: calc(var(--r) * 48);
+    font-family: 'Tiny5';
+    font-weight: 400;
+    font-size: calc(var(--r) * 48);
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #FFFFFF;
+    z-index: 1;
+}
+
+/* Stats zone — relative to info-zone: left 165 (540−375), top 91 (232−141) */
+.menu-shell .menu-header .menu-stat-zone {
+    position: absolute;
+    left: calc(var(--r) * 165);
+    top:  calc(var(--r) * 91);
+    width:  calc(var(--r) * 450);
+    height: calc(var(--r) * 75);
+}
+.menu-shell .menu-header .menu-stat-bg {
+    position: absolute;
+    inset: 0;
+    background: #46C1FF;
+    border-radius: calc(var(--r) * 15);
+}
+/* artboard: left 570, top 243 → rel to menu-stat-zone (540,232): left 30, top 11 */
+.menu-shell .menu-header .fame-text {
+    position: absolute;
+    left: calc(var(--r) * 30);
+    top:  calc(var(--r) * 11);
+    width:  calc(var(--r) * 126);
+    height: calc(var(--r) * 54);
+    font-family: 'Tiny5';
+    font-weight: 400;
+    font-size: calc(var(--r) * 48);
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    color: #FFFFFF;
+    z-index: 1;
+}
+/* artboard: left 708, top 246 → rel to menu-stat-zone (540,232): left 168, top 14 */
+.menu-shell .menu-header .fame-stars {
+    position: absolute;
+    left: calc(var(--r) * 168);
+    top:  calc(var(--r) * 14);
+    width:  calc(var(--r) * 240);
+    height: calc(var(--r) * 48);
+    background-image: url(UI/task-menu/fame-stars.png);
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    z-index: 1;
+}
+
+/* Separator line — artboard top:343 = bottom edge of header */
+.menu-shell .menu-header .menu-header-line {
+    position: absolute;
+    left:  calc(var(--r) * 19);
+    top:   calc(var(--r) * 343);
+    width: calc(var(--r) * 1040);
+    height: 0;
+    border-top: calc(var(--r) * 10) solid #2E2519;
+    z-index: 3;
+}
+
+
+/* Footer background + centered footer button */
+.menu-shell .menu-footer {
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    transform: translateX(-50%);
+    /* exact art asset size: 1080 x 181 */
+    width: calc(var(--r) * 1080);
+    height: calc(var(--r) * 181);
+    z-index: 4;
+    background-image: url(UI/task-menu/footer-bg.png);
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    background-position: center;
+    pointer-events: auto;
+}
+
+.menu-shell .menu-footer-btn {
+    position: absolute;
+    left: 50%;
+    bottom: 0; /* flush to footer bottom */
+    transform: translateX(-50%);
+    /* exact art asset size: 440 x 159 */
+    width: calc(var(--r) * 440);
+    height: calc(var(--r) * 159);
+    border: none;
+    background-image: url(UI/task-menu/back-button.png);
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    background-position: center;
+    background-color: transparent;
+    z-index: 5;
+}
+
+/* ============================================================
+   TASK CARD  —  Figma artboard slot: 1012 × 291
+   Cards stack vertically inside .menu-body via flex column
+   ============================================================ */
+.task-card {
+    position: relative;
+    flex-shrink: 0;
+    width:  calc(var(--r) * 1012);
+    height: calc(var(--r) * 291);
+}
+
+.task-card .task-card-bg {
+    position: absolute;
+    inset: 0;
+    background: #BFAC8E;
+    border-radius: calc(var(--r) * 44);
+}
+
+/* Job icon — left side of card */
+.task-card .task-job-icon {
+    position: absolute;
+    left: calc(var(--r) * 19);
+    top:  calc(var(--r) * 31);
+    width:  calc(var(--r) * 185);
+    height: calc(var(--r) * 227);
+    background-image: url(UI/task-frame/icon-job-base-order.png);
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    z-index: 1;
+}
+
+/* Task name */
+.task-card .task-name {
+    position: absolute;
+    left: calc(var(--r) * 226);
+    top:  calc(var(--r) * 31);
+    width:  calc(var(--r) * 512);
+    height: calc(var(--r) * 82);
+    font-family: 'Tiny5';
+    font-weight: 400;
+    font-size: calc(var(--r) * 65);
+    line-height: calc(var(--r) * 73);
+    display: flex;
+    align-items: center;
+    letter-spacing: -0.07em;
+    color: #000;
+    z-index: 1;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+/* Divider */
+.task-card .task-divider {
+    position: absolute;
+    left:  calc(var(--r) * 225);
+    top:   calc(var(--r) * 118);
+    width: calc(var(--r) * 755);
+    height: 0;
+    border-top: calc(var(--r) * 3) solid #9D8B73;
+    z-index: 1;
+}
+
+/* Job description */
+.task-card .task-job-desc {
+    position: absolute;
+    left: calc(var(--r) * 226);
+    top:  calc(var(--r) * 128);
+    width:  calc(var(--r) * 459);
+    height: calc(var(--r) * 55);
+    font-family: 'Tiny5';
+    font-weight: 400;
+    font-size: calc(var(--r) * 48);
+    line-height: calc(var(--r) * 54);
+    display: flex;
+    align-items: center;
+    color: #000;
+    z-index: 1;
+}
+
+/* Payout zone — artboard: left 226, top 195 */
+.task-card .task-payout {
+    position: absolute;
+    left: calc(var(--r) * 226);
+    top:  calc(var(--r) * 195);
+    width:  calc(var(--r) * 513);
+    height: calc(var(--r) * 64);
+    z-index: 1;
+}
+
+/* Pay slots (relative to payout zone) */
+.task-card .pay-funds,
+.task-card .pay-xp,
+.task-card .pay-prestige {
+    position: absolute;
+    top: 0;
+    height: calc(var(--r) * 64);
+}
+/* artboard left 226 → rel 0 */
+.task-card .pay-funds    { left: 0;                    width: calc(var(--r) * 171); }
+/* artboard left 397 → rel 171 (397-226) */
+.task-card .pay-xp       { left: calc(var(--r) * 171); width: calc(var(--r) * 170); }
+/* artboard left 567 → rel 341 (567-226) */
+.task-card .pay-prestige { left: calc(var(--r) * 341); width: calc(var(--r) * 172); }
+
+/* Pay icons */
+.task-card .pay-icon {
+    position: absolute;
+    left: 0; top: 0;
+    width:  calc(var(--r) * 64);
+    height: calc(var(--r) * 64);
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+}
+.task-card .pay-icon--funds    { background-image: url(UI/task-frame/icon-funds.png); }
+.task-card .pay-icon--xp       { background-image: url(UI/task-frame/icon-xp.png); }
+.task-card .pay-icon--prestige { background-image: url(UI/task-frame/icon-prestige-pool.png); }
+
+/* Pay values (icon is 64px; text starts at 73px = 64+9 gap) */
+.task-card .pay-value {
+    position: absolute;
+    left: calc(var(--r) * 73);
+    top:  calc(var(--r) * 4);
+    height: calc(var(--r) * 55);
+    font-family: 'Tiny5';
+    font-weight: 400;
+    font-size: calc(var(--r) * 48);
+    line-height: calc(var(--r) * 54);
+    display: flex;
+    align-items: center;
+    letter-spacing: -0.1em;
+    color: #000;
+}
+.task-card .pay-funds    .pay-value { width: calc(var(--r) * 98); }
+.task-card .pay-xp       .pay-value { width: calc(var(--r) * 97); }
+.task-card .pay-prestige .pay-value { width: calc(var(--r) * 99); }
+
+/* Timer zone — artboard: left 739, top 31 */
+.task-card .task-timer {
+    position: absolute;
+    left: calc(var(--r) * 739);
+    top:  calc(var(--r) * 31);
+    width:  calc(var(--r) * 241);
+    height: calc(var(--r) * 82);
+    z-index: 1;
+}
+.task-card .task-timer-bg {
+    position: absolute;
+    left: 0;
+    top:  calc(var(--r) * 4);
+    width:  calc(var(--r) * 241);
+    height: calc(var(--r) * 73);
+    background: #D9D9D9;
+    border-radius: calc(var(--r) * 15);
+}
+/* artboard: left 753, top 40 → rel to timer-zone (739,31): left 14, top 9 */
+.task-card .task-timer-icon {
+    position: absolute;
+    left: calc(var(--r) * 14);
+    top:  calc(var(--r) * 9);
+    width:  calc(var(--r) * 64);
+    height: calc(var(--r) * 64);
+    background-image: url(UI/task-frame/icon-timer.png);
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    z-index: 1;
+}
+/* artboard: left 817, top 31 → rel to timer-zone (739,31): left 78, top 0 */
+.task-card .task-timer-value {
+    position: absolute;
+    left: calc(var(--r) * 78);
+    top:  0;
+    width:  calc(var(--r) * 163);
+    height: calc(var(--r) * 82);
+    font-family: 'Tiny5';
+    font-weight: 400;
+    font-size: calc(var(--r) * 54);
+    line-height: calc(var(--r) * 61);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #000;
+    z-index: 1;
+}
+
+/* Start button — artboard: left 731, top 128 */
+.task-card .task-start-btn {
+    position: absolute;
+    left: calc(var(--r) * 731);
+    top:  calc(var(--r) * 128);
+    width:  calc(var(--r) * 257);
+    height: calc(var(--r) * 147);
+    background-image: url(UI/task-frame/start-button.png);
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    z-index: 2;
+    transition: transform 0.08s ease;
+}
+.task-card .task-start-btn:active { transform: scale(0.95); }
+
+/* ============================================================
+   TASK CARD — STORY modifier  (height 350, wider title, no timer)
+   ============================================================ */
+.task-card--story {
+    height: calc(var(--r) * 350);
+}
+
+/* Task name extends full right (no timer) */
+.task-card--story .task-name {
+    width: calc(var(--r) * 754);
+}
+
+/* Story-specific job icon */
+.task-card--story .task-job-icon {
+    background-image: url(UI/task-frame/icon-job-base-story.png);
+}
+
+/* Story-specific start button */
+.task-card--story .task-start-btn {
+    background-image: url(UI/task-frame/start-button-story.png);
+}
+
+/* Bottom description — artboard: left 31, top 275, width 951 */
+.task-card--story .task-card-desc {
+    position: absolute;
+    left:   calc(var(--r) * 31);
+    top:    calc(var(--r) * 275);
+    width:  calc(var(--r) * 951);
+    height: calc(var(--r) * 55);
+    font-family: 'Tiny5';
+    font-weight: 400;
+    font-size: calc(var(--r) * 48);
+    line-height: calc(var(--r) * 54);
+    display: flex;
+    align-items: center;
+    color: #000;
+    z-index: 1;
+}
+
+/* ============================================================
+   TASK CARD — RESEARCH modifier  (height 350, no payout, price text)
+   ============================================================ */
+.task-card--research {
+    height: calc(var(--r) * 350);
+}
+
+/* Research icon */
+.task-card--research .task-job-icon {
+    background-image: url(UI/task-frame/icon-job-base-research.png);
+}
+
+/* Research start button */
+.task-card--research .task-start-btn {
+    background-image: url(UI/task-frame/start-button-research.png);
+}
+
+/* Name narrower to leave room for stage indicator: width 678 */
+.task-card--research .task-name {
+    width: calc(var(--r) * 678);
+    justify-content: flex-start;
+    text-align: left;
+}
+
+/* Job desc larger font (65px in Figma) */
+.task-card--research .task-job-desc {
+    width:     calc(var(--r) * 459);
+    font-size: calc(var(--r) * 65);
+    line-height: calc(var(--r) * 73);
+    letter-spacing: -0.07em;
+}
+
+/* Price text — artboard: left 226, top 204 */
+.task-card--research .task-price {
+    position: absolute;
+    left:   calc(var(--r) * 226);
+    top:    calc(var(--r) * 204);
+    width:  calc(var(--r) * 459);
+    height: calc(var(--r) * 55);
+    font-family: 'Tiny5';
+    font-weight: 400;
+    font-size: calc(var(--r) * 65);
+    line-height: calc(var(--r) * 73);
+    display: flex;
+    align-items: center;
+    letter-spacing: -0.07em;
+    color: #000;
+    z-index: 1;
+}
+
+/* Stage indicator — artboard: left 916, top 44 */
+.task-card--research .task-stage {
+    position: absolute;
+    left:   calc(var(--r) * 916);
+    top:    calc(var(--r) * 44);
+    width:  calc(var(--r) * 96);
+    height: calc(var(--r) * 55);
+    font-family: 'Tiny5';
+    font-weight: 400;
+    font-size: calc(var(--r) * 48);
+    line-height: calc(var(--r) * 54);
+    display: flex;
+    align-items: center;
+    color: #000;
+    z-index: 1;
+}
+
+/* Bottom description (shared structure with story) */
+.task-card--research .task-card-desc {
+    position: absolute;
+    left:   calc(var(--r) * 31);
+    top:    calc(var(--r) * 275);
+    width:  calc(var(--r) * 951);
+    height: calc(var(--r) * 55);
+    font-family: 'Tiny5';
+    font-weight: 400;
+    font-size: calc(var(--r) * 48);
+    line-height: calc(var(--r) * 54);
+    display: flex;
+    align-items: center;
+    color: #000;
+    z-index: 1;
+}
+
+/* ============================================================
+   TASK CARD — PROMO modifier  (height 350, 2-slot payout, repeatable toggle)
+   ============================================================ */
+.task-card--promo {
+    height: calc(var(--r) * 350);
+}
+
+.task-card--promo .task-job-icon {
+    background-image: url(UI/task-frame/icon-job-base-promo.png);
+}
+
+.task-card--promo .task-start-btn {
+    background-image: url(UI/task-frame/start-button-promo.png);
+}
+
+/* Name: same width as research (678) — room for repeatable button */
+.task-card--promo .task-name {
+    width: calc(var(--r) * 678);
+    justify-content: flex-start;
+    text-align: left;
+}
+
+/* Job desc: 65px (same as research) */
+.task-card--promo .task-job-desc {
+    width:       calc(var(--r) * 459);
+    font-size:   calc(var(--r) * 65);
+    line-height: calc(var(--r) * 73);
+    letter-spacing: -0.07em;
+}
+
+/* Payout zone: left 225, width 344, 2 slots */
+.task-card--promo .task-payout {
+    left:  calc(var(--r) * 225);
+    width: calc(var(--r) * 344);
+}
+
+/* slot 1 — icon-prestige-pool.png, no background */
+.task-card--promo .pay-icon--promo-pool {
+    background-image: url(UI/task-frame/icon-prestige-pool.png);
+}
+/* slot 2 — artboard left 397 → offset 172 from payout left 225 */
+.task-card--promo .pay-prestige {
+    left:  calc(var(--r) * 172);
+    width: calc(var(--r) * 172);
+}
+.task-card--promo .pay-prestige .pay-value {
+    width: calc(var(--r) * 99);
+}
+/* slot 2 — icon-prestige.png, no background */
+.task-card--promo .pay-icon--promo-prestige {
+    background-image: url(UI/task-frame/icon-prestige.png);
+}
+
+/* Repeatable toggle button — artboard: left 924, top 40 */
+.task-card--promo .task-repeatable {
+    position: absolute;
+    left:   calc(var(--r) * 924);
+    top:    calc(var(--r) * 40);
+    width:  calc(var(--r) * 64);
+    height: calc(var(--r) * 64);
+    background-image: url(UI/task-frame/repeatable-off.png);
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    z-index: 2;
+    transition: transform 0.08s ease;
+}
+.task-card--promo .task-repeatable[data-active="true"] {
+    background-image: url(UI/task-frame/repeatable-on.png);
+}
+.task-card--promo .task-repeatable:active { transform: scale(0.9); }
+
+/* Bottom description */
+.task-card--promo .task-card-desc {
+    position: absolute;
+    left:   calc(var(--r) * 31);
+    top:    calc(var(--r) * 275);
+    width:  calc(var(--r) * 951);
+    height: calc(var(--r) * 55);
+    font-family: 'Tiny5';
+    font-weight: 400;
+    font-size: calc(var(--r) * 48);
+    line-height: calc(var(--r) * 54);
+    display: flex;
+    align-items: center;
+    color: #000;
+    z-index: 1;
+}
+
+/* ─── Research Pool Vertical Bar ─── */
+.research-pool-wrap {
+    display: none;
+    position: absolute;
+    left: calc(var(--r) * 6);
+    top: calc(var(--r) * 218);
+    width: calc(var(--r) * 48);
+    z-index: 11;
+}
+.research-pool-wrap.active { display: block; }
+.research-pool-bar {
+    width: 100%;
+    height: calc(var(--r) * 490);
+    background: rgba(0, 0, 0, 0.45);
+    border-radius: calc(var(--r) * 14);
+    overflow: hidden;
+    position: relative;
+}
+.research-pool-fill {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 0%;
+    background: linear-gradient(0deg, #3ddc00 0%, #a0ff50 100%);
+    border-radius: calc(var(--r) * 14);
+    transition: height 0.4s ease;
+}
+.research-pool-label {
+    display: block;
+    margin-top: calc(var(--r) * 6);
+    font-size: calc(var(--r) * 14);
+    color: #fff;
+    text-align: center;
+    text-shadow: 0 1px 3px #000;
+    line-height: 1.2;
+    font-family: 'Tiny5', monospace;
+}
